@@ -16,7 +16,7 @@ public class URPOcclusionSystem : MonoBehaviour
     [Header("Cast Settings")]
     [SerializeField] private bool useSphereCast = true;
     [SerializeField] private float sphereRadius = 0.5f;
-    [SerializeField] private bool visualizeSphereCast = false;
+    [SerializeField] private bool visualizeSphereCast;
 
     [Header("Visual Settings")]
     [SerializeField] private Color occludedTint = new Color(0.8f, 0.8f, 1.0f, 1.0f);
@@ -25,6 +25,8 @@ public class URPOcclusionSystem : MonoBehaviour
     private static readonly int OcclusionAmount = Shader.PropertyToID("_OcclusionAmount");
     private static readonly int OcclusionColor = Shader.PropertyToID("_OcclusionColor");
     private static readonly int EdgeHighlight = Shader.PropertyToID("_EdgeHighlight");
+    private static readonly int BaseMap = Shader.PropertyToID("_BaseMap");
+    private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
 
     private readonly Dictionary<Renderer, RendererData> _trackedRenderers = new Dictionary<Renderer, RendererData>();
     private float _raycastTimer;
@@ -99,6 +101,7 @@ public class URPOcclusionSystem : MonoBehaviour
         if (useSphereCast)
         {
             // Use sphere cast for more generous occlusion detection
+            // ReSharper disable once Unity.PreferNonAllocApi
             hits = Physics.SphereCastAll(
                 cameraTransform.position,
                 sphereRadius,
@@ -119,6 +122,7 @@ public class URPOcclusionSystem : MonoBehaviour
         else
         {
             // Use standard raycast for precise occlusion detection
+            // ReSharper disable once Unity.PreferNonAllocApi
             hits = Physics.RaycastAll(
                 cameraTransform.position,
                 dirToPlayer,
@@ -136,24 +140,24 @@ public class URPOcclusionSystem : MonoBehaviour
         foreach (RaycastHit hit in hits)
         {
             Renderer[] renderers = hit.collider.GetComponentsInChildren<Renderer>();
-            foreach (Renderer renderer in renderers)
+            foreach (Renderer myRenderer in renderers)
             {
-                if (renderer == null)
+                if (myRenderer == null)
                     continue;
 
                 // Skip renderers that don't use standard materials (like particles)
-                if (renderer.GetType() == typeof(ParticleSystemRenderer))
+                if (myRenderer is ParticleSystemRenderer)
                     continue;
 
                 // Mark this renderer as occluding
-                if (_trackedRenderers.TryGetValue(renderer, out RendererData data))
+                if (_trackedRenderers.TryGetValue(myRenderer, out RendererData data))
                 {
                     data.IsOccluding = true;
                 }
                 else
                 {
                     // First time seeing this renderer - set up tracking
-                    SetupRenderer(renderer);
+                    SetupRenderer(myRenderer);
                 }
             }
         }
@@ -195,14 +199,14 @@ public class URPOcclusionSystem : MonoBehaviour
         }
     }
 
-    private void SetupRenderer(Renderer renderer)
+    private void SetupRenderer(Renderer myRenderer)
     {
-        if (renderer == null) return;
+        if (myRenderer == null) return;
 
         var data = new RendererData
         {
-            OriginalMaterials = renderer.sharedMaterials,
-            OcclusionMaterials = new Material[renderer.sharedMaterials.Length],
+            OriginalMaterials = myRenderer.sharedMaterials,
+            OcclusionMaterials = new Material[myRenderer.sharedMaterials.Length],
             CurrentOcclusionValue = 0f,
             IsOccluding = true
         };
@@ -214,18 +218,18 @@ public class URPOcclusionSystem : MonoBehaviour
             data.OcclusionMaterials[i] = new Material(_occlusionMaterial);
 
             // Copy main texture and color from original if available
-            if (data.OriginalMaterials[i].HasProperty("_BaseMap"))
-                data.OcclusionMaterials[i].SetTexture("_BaseMap", data.OriginalMaterials[i].GetTexture("_BaseMap"));
+            if (data.OriginalMaterials[i].HasProperty(BaseMap))
+                data.OcclusionMaterials[i].SetTexture(BaseMap, data.OriginalMaterials[i].GetTexture(BaseMap));
 
-            if (data.OriginalMaterials[i].HasProperty("_BaseColor"))
-                data.OcclusionMaterials[i].SetColor("_BaseColor", data.OriginalMaterials[i].GetColor("_BaseColor"));
+            if (data.OriginalMaterials[i].HasProperty(BaseColor))
+                data.OcclusionMaterials[i].SetColor(BaseColor, data.OriginalMaterials[i].GetColor(BaseColor));
         }
 
         // Apply the occlusion materials
-        renderer.materials = data.OcclusionMaterials;
+        myRenderer.materials = data.OcclusionMaterials;
 
         // Add to tracked renderers
-        _trackedRenderers[renderer] = data;
+        _trackedRenderers[myRenderer] = data;
     }
 
     private void UpdateOcclusionValues()
@@ -235,12 +239,12 @@ public class URPOcclusionSystem : MonoBehaviour
 
         foreach (var kvp in _trackedRenderers)
         {
-            Renderer renderer = kvp.Key;
+            Renderer myRenderer = kvp.Key;
             RendererData data = kvp.Value;
 
-            if (renderer == null)
+            if (myRenderer == null)
             {
-                renderersToRemove.Add(renderer);
+                renderersToRemove.Add(myRenderer);
                 continue;
             }
 
@@ -266,7 +270,7 @@ public class URPOcclusionSystem : MonoBehaviour
             // If not occluding and fully opaque, restore original materials
             if (!data.IsOccluding && Mathf.Approximately(data.CurrentOcclusionValue, 0f))
             {
-                renderer.materials = data.OriginalMaterials;
+                myRenderer.materials = data.OriginalMaterials;
 
                 // Clean up the occlusion materials
                 foreach (Material material in data.OcclusionMaterials)
@@ -275,14 +279,14 @@ public class URPOcclusionSystem : MonoBehaviour
                         Destroy(material);
                 }
 
-                renderersToRemove.Add(renderer);
+                renderersToRemove.Add(myRenderer);
             }
         }
 
         // Remove renderers that are no longer tracked
-        foreach (Renderer renderer in renderersToRemove)
+        foreach (Renderer myRenderer in renderersToRemove)
         {
-            _trackedRenderers.Remove(renderer);
+            _trackedRenderers.Remove(myRenderer);
         }
     }
 
