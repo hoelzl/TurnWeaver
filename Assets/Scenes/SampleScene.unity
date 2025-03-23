@@ -655,8 +655,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 505849622}
-  - {fileID: 1554235763}
   - {fileID: 569832188}
+  - {fileID: 1554235763}
   - {fileID: 1206905719}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1105,9 +1105,9 @@ MonoBehaviour:
   virtualCamera: {fileID: 2050917826}
   cameraTarget: {fileID: 199966444}
   rotationSpeed: 120
-  zoomSpeed: 4
-  minZoomDistance: 3
-  maxZoomDistance: 15
+  zoomSpeed: 2
+  minZoomDistance: 5
+  maxZoomDistance: 25
   initialOffset: {x: 0, y: 10, z: -8}
 --- !u!4 &1463774100
 Transform:
@@ -1309,7 +1309,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2087242255966285571, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_Name
-      value: House
+      value: House (0)
       objectReference: {fileID: 0}
     - target: {fileID: 6982895104674903142, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_LocalPosition.x

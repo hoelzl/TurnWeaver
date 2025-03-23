@@ -6,29 +6,34 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")] [SerializeField] private float turnSpeed = 10f;
-    [SerializeField] private float moveSpeed = 4f;
+    [Header("Movement")]
+    [SerializeField] private float turnSpeed = 10f;
+    [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float moveDistancePerTurn = 5f;
 
-    [Header("Interaction")] [SerializeField]
-    private float interactionRange = 2f;
+    [Header("Navigation Settings")]
+    [SerializeField] private float stoppingDistance = 0.1f;
+    [SerializeField] private bool debugPath;
 
+    [Header("Interaction")]
+    [SerializeField] private float interactionRange = 2f;
     [SerializeField] private GameObject selectionMarkerPrefab;
     [SerializeField] private GameObject interactionMenuPrefab;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private LayerMask groundLayer;
 
-    [Header("Debugging")] [SerializeField] private bool debugRaycasts = false;
+    [Header("Debugging")]
+    [SerializeField] private bool debugRaycasts;
 
     private NavMeshAgent _agent;
     private Animator _animator;
     private GameObject _selectionMarker;
     private Camera _camera;
     private bool _isTurnActive;
-    private float _distanceMovedInTurn;
-    private Vector3 _lastPosition;
     private GameObject _currentInteractionMenu;
     private bool _isInteracting;
+    private Vector3 _targetDestination;
+    private bool _hasPendingDestination;
 
     // Animation parameter hashes
     private readonly int _moveSpeedParam = Animator.StringToHash("MoveSpeed");
@@ -44,6 +49,7 @@ public class PlayerController : MonoBehaviour
         // Initialize input actions
         _inputActions = new RPGInputActions();
     }
+
 
     private void OnEnable()
     {
@@ -96,9 +102,12 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
 
+        // Set agent properties
         _agent.speed = moveSpeed;
         _agent.angularSpeed = turnSpeed;
         _agent.updateRotation = true;
+        _agent.stoppingDistance = stoppingDistance;
+        _agent.autoBraking = false; // Turn off automatic braking
 
         // Create selection marker
         if (selectionMarkerPrefab != null)
@@ -106,20 +115,29 @@ public class PlayerController : MonoBehaviour
             _selectionMarker = Instantiate(selectionMarkerPrefab);
             _selectionMarker.SetActive(false);
         }
-
-        _lastPosition = transform.position;
     }
 
     private void Update()
     {
         // Update movement animations and distance tracking
         UpdateMovement();
+
+        // Debug path visualization
+        if (debugPath && _agent.hasPath)
+        {
+            Debug.DrawLine(transform.position, _agent.destination, Color.blue);
+            if (_agent.path != null && _agent.path.corners.Length > 1)
+            {
+                for (int i = 0; i < _agent.path.corners.Length - 1; i++)
+                {
+                    Debug.DrawLine(_agent.path.corners[i], _agent.path.corners[i + 1], Color.red);
+                }
+            }
+        }
     }
 
     private void OnClick(InputAction.CallbackContext context)
     {
-        Debug.Log("OnClick");
-
         // Only handle clicks when not already in an interaction
         if (_isInteracting) return;
 
@@ -143,8 +161,10 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateMovement()
     {
-        // Check if we're moving
-        if (_agent.velocity.magnitude > 0.1f)
+        // Check if we're still moving
+        bool isMoving = _agent.velocity.magnitude > 0.1f;
+
+        if (isMoving)
         {
             float speed = _agent.velocity.magnitude / moveSpeed;
             if (_animator != null)
@@ -152,27 +172,28 @@ public class PlayerController : MonoBehaviour
                 _animator.SetFloat(_moveSpeedParam, speed);
                 _animator.SetBool(_isMovingParam, true);
             }
-
-            // Track distance moved for turn-based gameplay
-            if (_isTurnActive)
+        }
+        else
+        {
+            // We've stopped moving
+            if (_animator != null)
             {
-                _distanceMovedInTurn += Vector3.Distance(transform.position, _lastPosition);
+                _animator.SetFloat(_moveSpeedParam, 0);
+                _animator.SetBool(_isMovingParam, false);
+            }
 
-                // Check if we've moved our allowed distance
-                if (_distanceMovedInTurn >= moveDistancePerTurn)
+            // If we have reached our destination...
+            if (Vector3.Distance(transform.position, _targetDestination) <= _agent.stoppingDistance)
+            {
+                // ...hide the marker
+                if (_selectionMarker != null && _selectionMarker.activeSelf)
                 {
-                    StopMoving();
-                    EndTurn();
+                    _selectionMarker.SetActive(false);
                 }
+                // and notify the turn manager
+                TurnManager.Instance?.EndPlayerTurn();
             }
         }
-        else if (_animator != null)
-        {
-            _animator.SetFloat(_moveSpeedParam, 0);
-            _animator.SetBool(_isMovingParam, false);
-        }
-
-        _lastPosition = transform.position;
     }
 
     private void HandleInteractableHit(RaycastHit hit)
@@ -196,15 +217,20 @@ public class PlayerController : MonoBehaviour
             Vector3 direction = (targetPos - transform.position).normalized;
             Vector3 destinationPoint = targetPos - (direction * (interactionRange * 0.8f));
 
+            // Find nearest point on navmesh
+            if (NavMesh.SamplePosition(destinationPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas))
+            {
+                _targetDestination = navHit.position;
+                _agent.SetDestination(navHit.position);
+                _agent.isStopped = false;
+            }
+
             // Show selection marker
             if (_selectionMarker != null)
             {
-                _selectionMarker.transform.position = destinationPoint;
+                _selectionMarker.transform.position = _targetDestination;
                 _selectionMarker.SetActive(true);
             }
-
-            // Move to the destination
-            _agent.SetDestination(destinationPoint);
 
             // Start coroutine to wait until in range
             StartCoroutine(MoveToInteractable(interactable, targetPos));
@@ -213,26 +239,41 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGroundHit(RaycastHit hit)
     {
-        // Just move to clicked ground position
-        _agent.SetDestination(hit.point);
+        // Update the target destination
+        _targetDestination = hit.point;
+        _hasPendingDestination = true;
 
-        // Show selection marker
-        if (_selectionMarker != null)
+        // Set destination for NavMeshAgent
+        if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas))
         {
-            _selectionMarker.transform.position = hit.point;
-            _selectionMarker.SetActive(true);
+            _agent.SetDestination(navHit.position);
+            _agent.isStopped = false;
 
-            // Hide marker after delay
-            StartCoroutine(HideMarkerAfterDelay(1.5f));
+            // Show selection marker
+            if (_selectionMarker != null)
+            {
+                _selectionMarker.transform.position = navHit.position;
+                _selectionMarker.SetActive(true);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Clicked position is not on NavMesh!");
         }
     }
 
     private IEnumerator MoveToInteractable(IInteractable interactable, Vector3 targetPos)
     {
-        // Wait until we're close enough or stopped moving
+        // Keep checking if we're close enough while path is still active
         while (_agent.pathPending ||
-               (_agent.remainingDistance > interactionRange && _agent.remainingDistance > _agent.stoppingDistance))
+               (_agent.hasPath && _agent.remainingDistance > interactionRange))
         {
+            // Check if a new destination was set during this coroutine
+            if (_hasPendingDestination && _targetDestination != _agent.destination)
+            {
+                yield break; // Exit the coroutine if a new destination was set
+            }
+
             yield return null;
         }
 
@@ -304,7 +345,9 @@ public class PlayerController : MonoBehaviour
 
     public void StopMoving()
     {
+        _agent.isStopped = true;
         _agent.ResetPath();
+        _hasPendingDestination = false;
 
         if (_animator == null) return;
         _animator.SetBool(_isMovingParam, false);
@@ -314,14 +357,13 @@ public class PlayerController : MonoBehaviour
     public void StartTurn()
     {
         _isTurnActive = true;
-        _distanceMovedInTurn = 0f;
     }
 
     public void EndTurn()
     {
         _isTurnActive = false;
 
-        // Notify turn manager (you'll implement this later)
+        // Notify turn manager
         TurnManager.Instance?.EndPlayerTurn();
     }
 
@@ -336,6 +378,4 @@ public class PlayerController : MonoBehaviour
 
     // Public methods for external systems to query state
     public bool IsMoving() => _agent.velocity.magnitude > 0.1f;
-    public bool IsTurnActive() => _isTurnActive;
-    public float GetRemainingMoveDistance() => moveDistancePerTurn - _distanceMovedInTurn;
 }
