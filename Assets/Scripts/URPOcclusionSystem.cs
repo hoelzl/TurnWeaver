@@ -13,6 +13,11 @@ public class URPOcclusionSystem : MonoBehaviour
     [SerializeField] private float transitionSpeed = 5f;
     [SerializeField] private float minTransparency = 0.2f;
 
+    [Header("Cast Settings")]
+    [SerializeField] private bool useSphereCast = true;
+    [SerializeField] private float sphereRadius = 0.5f;
+    [SerializeField] private bool visualizeSphereCast = false;
+
     [Header("Visual Settings")]
     [SerializeField] private Color occludedTint = new Color(0.8f, 0.8f, 1.0f, 1.0f);
     [SerializeField] private bool showEdgeHighlight = true;
@@ -89,12 +94,44 @@ public class URPOcclusionSystem : MonoBehaviour
         Vector3 dirToPlayer = (player.position - cameraTransform.position).normalized;
         float distToPlayer = Vector3.Distance(cameraTransform.position, player.position);
 
-        RaycastHit[] hits = Physics.RaycastAll(
-            cameraTransform.position,
-            dirToPlayer,
-            distToPlayer,
-            buildingLayerMask
-        );
+        RaycastHit[] hits;
+
+        if (useSphereCast)
+        {
+            // Use sphere cast for more generous occlusion detection
+            hits = Physics.SphereCastAll(
+                cameraTransform.position,
+                sphereRadius,
+                dirToPlayer,
+                distToPlayer,
+                buildingLayerMask
+            );
+
+            // Visualize the sphere cast in the editor
+            if (visualizeSphereCast && Application.isEditor)
+            {
+                Debug.DrawRay(cameraTransform.position, dirToPlayer * distToPlayer, Color.yellow);
+                // The SphereCast is harder to visualize, but we can at least show the start and end spheres
+                DebugDrawSphere(cameraTransform.position, sphereRadius, Color.green);
+                DebugDrawSphere(cameraTransform.position + dirToPlayer * distToPlayer, sphereRadius, Color.red);
+            }
+        }
+        else
+        {
+            // Use standard raycast for precise occlusion detection
+            hits = Physics.RaycastAll(
+                cameraTransform.position,
+                dirToPlayer,
+                distToPlayer,
+                buildingLayerMask
+            );
+
+            // Visualize the ray in the editor
+            if (visualizeSphereCast && Application.isEditor)
+            {
+                Debug.DrawRay(cameraTransform.position, dirToPlayer * distToPlayer, Color.yellow);
+            }
+        }
 
         foreach (RaycastHit hit in hits)
         {
@@ -119,6 +156,42 @@ public class URPOcclusionSystem : MonoBehaviour
                     SetupRenderer(renderer);
                 }
             }
+        }
+    }
+
+    private void DebugDrawSphere(Vector3 center, float radius, Color color)
+    {
+        // Draw a wire sphere in the scene view for debugging
+        Vector3 prevPos = center + new Vector3(radius, 0, 0);
+        int segments = 16;
+
+        // Draw main circles
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * Mathf.PI * 2f / segments;
+            Vector3 currPos = center + new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
+            Debug.DrawLine(prevPos, currPos, color);
+            prevPos = currPos;
+        }
+
+        // XY plane
+        prevPos = center + new Vector3(radius, 0, 0);
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * Mathf.PI * 2f / segments;
+            Vector3 currPos = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+            Debug.DrawLine(prevPos, currPos, color);
+            prevPos = currPos;
+        }
+
+        // YZ plane
+        prevPos = center + new Vector3(0, radius, 0);
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * Mathf.PI * 2f / segments;
+            Vector3 currPos = center + new Vector3(0, Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+            Debug.DrawLine(prevPos, currPos, color);
+            prevPos = currPos;
         }
     }
 
