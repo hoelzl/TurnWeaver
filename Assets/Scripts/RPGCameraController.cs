@@ -6,13 +6,13 @@ public class RPGCameraController : MonoBehaviour
 {
     [Header("Cinemachine Setup")]
     [SerializeField] private CinemachineCamera virtualCamera;
-    [SerializeField] private Transform cameraTarget;
+    [SerializeField] private Transform playerTransform;
 
     [Header("Camera Controls")]
     [SerializeField] private float rotationSpeed = 120f;
-    [SerializeField] private float zoomSpeed = 4f;
-    [SerializeField] private float minZoomDistance = 3f;
-    [SerializeField] private float maxZoomDistance = 15f;
+    [SerializeField] private float zoomSpeed = 2f;
+    [SerializeField] private float minZoomDistance = 5f;
+    [SerializeField] private float maxZoomDistance = 25f;
     [SerializeField] private Vector3 initialOffset = new Vector3(0, 10, -8);
 
     private CinemachineFollow _follow;
@@ -30,6 +30,18 @@ public class RPGCameraController : MonoBehaviour
     {
         // Initialize input actions
         _inputActions = new RPGInputActions();
+
+        // Try to find components if not set
+        if (virtualCamera == null)
+        {
+            virtualCamera = FindObjectOfType<CinemachineCamera>();
+        }
+
+        if (playerTransform == null && virtualCamera != null)
+        {
+            // Use the current follow target of the virtual camera
+            playerTransform = virtualCamera.Follow;
+        }
     }
 
     private void OnEnable()
@@ -66,25 +78,46 @@ public class RPGCameraController : MonoBehaviour
             return;
         }
 
-        // Get the transposer component for zoom control
+        if (playerTransform == null)
+        {
+            Debug.LogError("Player Transform not assigned to RPGCameraController!");
+            return;
+        }
+
+        // Get the follow component for zoom control
         _follow = virtualCamera.GetComponent<CinemachineFollow>();
-        if (_follow == null) return;
+        if (_follow == null)
+        {
+            Debug.LogError("CinemachineFollow component not found on the virtual camera!");
+            return;
+        }
 
         // Set initial position
         _follow.FollowOffset = initialOffset;
         _currentZoom = initialOffset.magnitude;
+
+        // Position this object at the player's position
+        transform.position = playerTransform.position;
+
+        // Make the virtual camera follow this object instead of the player
+        virtualCamera.Follow = transform;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        // Handle camera rotation only when right mouse button is held
+        // Keep this transform at the player's position
+        transform.position = playerTransform.position;
+
+        // Handle camera rotation when right mouse button is held
         if (_isRotating)
         {
             Vector2 currentMousePosition = _pointAction.ReadValue<Vector2>();
             Vector2 mouseDelta = currentMousePosition - _lastMousePosition;
 
             float horizontal = mouseDelta.x * rotationSpeed * Time.deltaTime;
-            cameraTarget.Rotate(0, horizontal, 0);
+
+            // Rotate this object around the Y-axis (world up)
+            transform.Rotate(0, horizontal, 0);
 
             _lastMousePosition = currentMousePosition;
         }
