@@ -6,7 +6,5 @@ namespace Interaction
     public interface IInteractionSystem
     {
         void ShowInteractionOptions(IInteractable interactable, Vector3 worldPosition);
-        void HandleInteractionSelection(IInteractable interactable, string option);
-        void CancelInteraction();
     }
 }

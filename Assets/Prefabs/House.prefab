@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6065446446436552847}
   - component: {fileID: 676332583892794056}
   - component: {fileID: -4601509651343027304}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,8 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdc71fd7ca974602afa6df6ac2385d66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: House
+  objectName: House 0
   interactionOptions:
-  - Use
+  - {fileID: 11400000, guid: 2f6f7c4d55e7a4f4481b27ee6479cd83, type: 2}
   isLocked: 0
-  requiredKeyItem: 
+  requiredKey: 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Interaction
@@ -9,9 +10,10 @@ namespace Interaction
         [SerializeField] private Transform buttonContainer;
         [SerializeField] private float buttonSpacing = 35f;
 
-        private System.Action<string> _onOptionSelected;
+        private System.Action<InteractionOptionSO> _onOptionSelected;
+        private System.Action _onCanceled;
 
-        public void Initialize(string[] options, System.Action<string> onOptionSelected)
+        public void Initialize(InteractionOptionSO[] options, Action<InteractionOptionSO> onOptionSelected)
         {
             _onOptionSelected = onOptionSelected;
 
@@ -31,17 +33,17 @@ namespace Interaction
                 rectTransform.anchoredPosition = new Vector2(0, -i * buttonSpacing);
 
                 // Set text - try TMPro first, then legacy UI Text
-                string option = options[i];
+                InteractionOptionSO option = options[i] ?? throw new ArgumentNullException(nameof(options));
                 TMPro.TextMeshProUGUI tmpText = buttonObj.GetComponentInChildren<TMPro.TextMeshProUGUI>();
                 if (tmpText != null)
                 {
-                    tmpText.text = option;
+                    tmpText.text = option.Text;
                 }
                 else
                 {
                     Text legacyText = buttonObj.GetComponentInChildren<Text>();
                     if (legacyText != null)
-                        legacyText.text = option;
+                        legacyText.text = option.Text;
                 }
 
                 Button button = buttonObj.GetComponent<Button>();
@@ -75,25 +77,15 @@ namespace Interaction
             }
         }
 
-        private void SelectOption(string option)
+        private void SelectOption(InteractionOptionSO option)
         {
             _onOptionSelected?.Invoke(option);
         }
 
         public void Cancel()
         {
-            // Find and use the interaction system to cancel properly
-            IInteractionSystem interactionSystem = FindAnyObjectByType<InteractionManager>();
-            interactionSystem?.CancelInteraction();
+            _onCanceled?.Invoke();
         }
 
-        private void Update()
-        {
-            // Cancel on right-click or Escape
-            if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
-            {
-                Cancel();
-            }
-        }
     }
 }

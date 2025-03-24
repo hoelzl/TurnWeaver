@@ -5,12 +5,11 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class PlayerController : MonoBehaviour, IInteractionHandler
+public class PlayerController : MonoBehaviour, IInteractionSource
 {
     [Header("Movement")]
     [SerializeField] private float turnSpeed = 10f;
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float moveDistancePerTurn = 5f;
 
     [Header("Navigation Settings")]
     [SerializeField] private float stoppingDistance = 0.1f;
@@ -29,7 +28,6 @@ public class PlayerController : MonoBehaviour, IInteractionHandler
     private Animator _animator;
     private GameObject _selectionMarker;
     private Camera _camera;
-    private bool _isTurnActive;
     private bool _isInteracting;
     private Vector3 _targetDestination;
     private bool _hasPendingDestination;
@@ -44,9 +42,6 @@ public class PlayerController : MonoBehaviour, IInteractionHandler
     private RPGInputActions _inputActions;
     private InputAction _clickAction;
     private InputAction _pointAction;
-
-    // IInteractionHandler implementation
-    public float GetInteractionRange() => interactionRange;
 
     private void Awake()
     {
@@ -150,7 +145,7 @@ public class PlayerController : MonoBehaviour, IInteractionHandler
 
         // IMPORTANT FIX: Always register with the interaction manager
         InteractionManager interactionManager = _interactionSystem as InteractionManager;
-        interactionManager?.SetCurrentHandler(this);
+        interactionManager?.SetInteractionSource(this.gameObject);
 
         // Calculate distance to interactable
         float distanceToTarget = Vector3.Distance(transform.position, hit.point);
@@ -167,7 +162,7 @@ public class PlayerController : MonoBehaviour, IInteractionHandler
             _interactionTimeoutCoroutine = StartCoroutine(InteractionTimeout(5.0f));
 
             _interactionSystem.ShowInteractionOptions(interactable, hit.point);
-            // NOTE: InteractionManager will call our OnInteractionComplete when done
+            // NOTE: InteractionManager will call our FinalizeInteraction when done
         }
         else
         {
@@ -301,10 +296,12 @@ public class PlayerController : MonoBehaviour, IInteractionHandler
         }
     }
 
-    // IInteractionHandler implementation
+    // IInteractionSource implementation
+    public float InteractionRange => interactionRange;
+
     public Transform Transform => transform;
 
-    public void OnInteractionComplete()
+    public void FinalizeInteraction(IInteractable interactable)
     {
         Debug.Log("Interaction complete - releasing player control");
         if (_interactionTimeoutCoroutine != null)
@@ -325,13 +322,10 @@ public class PlayerController : MonoBehaviour, IInteractionHandler
 
     public void StartTurn()
     {
-        _isTurnActive = true;
     }
 
     public void EndTurn()
     {
-        _isTurnActive = false;
-        TurnManager.Instance?.EndPlayerTurn();
     }
 
     public bool IsMoving() => _agent.velocity.magnitude > 0.1f;

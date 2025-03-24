@@ -1,65 +1,75 @@
 ﻿using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Interaction
 {
     public class InteractionManager : MonoBehaviour, IInteractionSystem
     {
-        private UIManager _uiManager;
-        private IInteractionHandler _currentHandler;
-        private IInteractable _currentInteractable;
+        [SerializeField] private GameObject interactionSource;
+        [SerializeField] private UIManager uiManager;
+
+        private IInteractionSource _interactionSourceComponent;
 
         private void Awake()
         {
-            _uiManager = FindAnyObjectByType<UIManager>();
-            if (_uiManager == null)
-                Debug.LogError("UIManager not found in scene!");
+            if (uiManager == null)
+            {
+                uiManager = FindAnyObjectByType<UIManager>();
+                if (uiManager == null)
+                    Debug.LogError("UIManager not specified and not found in scene!");
+            }
+            _interactionSourceComponent = interactionSource.GetComponent<IInteractionSource>();
         }
 
         public void ShowInteractionOptions(IInteractable interactable, Vector3 worldPosition)
         {
-            _currentInteractable = interactable;
-
-            // Get interaction options
-            string[] options = interactable.GetInteractionOptions();
-
-            // If there's only one option, execute it directly
-            if (options.Length <= 1)
+            InteractionOptionSO[] options = interactable.InteractionOptions;
+            if (_interactionSourceComponent == null)
             {
-                interactable.Interact(_currentHandler);
-
-                // Always notify handler when the interaction is complete
-                _currentHandler?.OnInteractionComplete();
+                Debug.LogWarning("Interaction Source not available. Cannot interact!");
                 return;
             }
 
-            // Show menu with options
-            _uiManager.ShowInteractionMenu(options, worldPosition,
-                (option) => { HandleInteractionSelection(interactable, option); });
+            switch (options.Length)
+            {
+                case <= 0:
+                    Debug.LogWarning("Interaction needs at least one option!");
+
+                    // Notify source that the interaction is complete, so that it can clean up even if no interaction
+                    // took place
+                    _interactionSourceComponent.FinalizeInteraction(interactable);
+                    break;
+                case 1 when interactable.AutoInvokeSingleOption:
+                {
+                    InteractionOptionSO optionSO = options[0];
+                    InteractWithOption(interactable, optionSO);
+                    break;
+                }
+                default:
+                    uiManager.ShowInteractionMenu(options, worldPosition,
+                        (optionSO) => { InteractWithOption(interactable, optionSO); },
+                        () => CancelInteraction(interactable));
+                    break;
+            }
         }
 
-        public void HandleInteractionSelection(IInteractable interactable, string option)
+        private void InteractWithOption(IInteractable interactable, InteractionOptionSO optionSO)
         {
-            _uiManager.CloseInteractionMenu();
-            interactable.InteractWithOption(_currentHandler, option);
-
-            Debug.Log("Notifying handler that interaction is complete");
-            // Notify handler that interaction is complete
-            _currentHandler?.OnInteractionComplete();
-            _currentInteractable = null;
+            IInteractionOption option = optionSO.CreateInstance(interactable);
+            option.Invoke(interactionSource, uiManager);
+            _interactionSourceComponent.FinalizeInteraction(interactable);
         }
 
-        public void CancelInteraction()
+        private void CancelInteraction(IInteractable interactable)
         {
-            _uiManager.CloseInteractionMenu();
-            _currentHandler?.OnInteractionComplete();
-            _currentInteractable = null;
+            uiManager.CloseInteractionMenu();
+            _interactionSourceComponent?.FinalizeInteraction(interactable);
         }
 
-        public void SetCurrentHandler(IInteractionHandler handler)
+        public void SetInteractionSource(GameObject source)
         {
-            _currentHandler = handler;
+            interactionSource = source;
         }
     }
-
 }

@@ -242,6 +242,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 772950010}
     m_Modifications:
+    - target: {fileID: -4601509651343027304, guid: ab748f3ec02c774478ec15934d291093, type: 3}
+      propertyPath: interactionOptions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2087242255966285571, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_Name
       value: House (2)
@@ -308,6 +312,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 772950010}
     m_Modifications:
+    - target: {fileID: -4601509651343027304, guid: ab748f3ec02c774478ec15934d291093, type: 3}
+      propertyPath: interactionOptions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2087242255966285571, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_Name
       value: House (3)
@@ -935,6 +943,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 772950010}
     m_Modifications:
+    - target: {fileID: -4601509651343027304, guid: ab748f3ec02c774478ec15934d291093, type: 3}
+      propertyPath: objectName
+      value: House 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2087242255966285571, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_Name
       value: House (1)
@@ -1058,6 +1070,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 772950010}
     m_Modifications:
+    - target: {fileID: -4601509651343027304, guid: ab748f3ec02c774478ec15934d291093, type: 3}
+      propertyPath: interactionOptions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2087242255966285571, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_Name
       value: House (4)
@@ -1327,6 +1343,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 769ecbb5ec464750ac8ccd36ac9ea5b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionSource: {fileID: 481040741827451072}
+  uiManager: {fileID: 2140761749}
 --- !u!1 &2050917824
 GameObject:
   m_ObjectHideFlags: 0
@@ -1639,7 +1657,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7195985130864445001, guid: 2e56f51ce6968cd42a167887c244b0d8, type: 3}
       propertyPath: debugRaycasts
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7195985130864445001, guid: 2e56f51ce6968cd42a167887c244b0d8, type: 3}
       propertyPath: interactionMenuPrefab
@@ -1654,6 +1672,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e56f51ce6968cd42a167887c244b0d8, type: 3}
+--- !u!1 &481040741827451072 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4314289424819075108, guid: 2e56f51ce6968cd42a167887c244b0d8, type: 3}
+  m_PrefabInstance: {fileID: 481040741827451071}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2264908030754465969
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1666,6 +1689,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC
       objectReference: {fileID: 0}
+    - target: {fileID: 8687075774502428654, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
+      propertyPath: npcName
+      value: Yellow NPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 8687075774502428654, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
+      propertyPath: interactionOptions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8687075774502428654, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
+      propertyPath: 'interactionOptions.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6ec8619b425ceea42a254c154ead5779, type: 2}
+    - target: {fileID: 8687075774502428654, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
+      propertyPath: 'interactionOptions.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f85e1d9d748b90d47981464da6a24459, type: 2}
     - target: {fileID: 9106103628588717915, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.15
@@ -1722,10 +1761,6 @@ PrefabInstance:
     - target: {fileID: 2087242255966285571, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_Name
       value: House (0)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2087242255966285571, guid: ab748f3ec02c774478ec15934d291093, type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6982895104674903142, guid: ab748f3ec02c774478ec15934d291093, type: 3}
       propertyPath: m_LocalPosition.x

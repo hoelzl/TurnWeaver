@@ -49,15 +49,8 @@ public class TurnManager : MonoBehaviour
     public void StartPlayerTurn()
     {
         _currentState = TurnState.PlayerTurn;
-
-        // Notify listeners of turn change
         OnTurnChanged?.Invoke(_currentState);
-
-        // Tell player they can now move
-        if (_player != null)
-        {
-            _player.StartTurn();
-        }
+        _player?.StartTurn();
 
         Debug.Log("Player Turn Started");
     }
@@ -70,6 +63,7 @@ public class TurnManager : MonoBehaviour
 
         _currentState = TurnState.Transitioning;
         OnTurnChanged?.Invoke(_currentState);
+        _player?.EndTurn();
 
         StartCoroutine(ProcessEnemyTurn());
     }

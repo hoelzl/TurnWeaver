@@ -1,4 +1,5 @@
-﻿using Interaction;
+﻿using System;
+using Interaction;
 using UnityEngine;
 
 namespace UI
@@ -10,7 +11,8 @@ namespace UI
 
         private GameObject _currentInteractionMenu;
 
-        public void ShowInteractionMenu(string[] options, Vector3 worldPosition, System.Action<string> onOptionSelected)
+        public void ShowInteractionMenu(InteractionOptionSO[] options, Vector3 worldPosition,
+            Action<InteractionOptionSO> onOptionSelected, Action onCancelled)
         {
             // Clean up any existing menu
             if (_currentInteractionMenu != null)
