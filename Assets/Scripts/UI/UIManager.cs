@@ -1,7 +1,6 @@
 ﻿using System;
 using Interaction;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UI
 {
