@@ -1,13 +1,14 @@
 ﻿using System;
 using Interaction;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI
 {
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private GameObject interactionMenuPrefab;
-        [SerializeField] private Canvas uiCanvas;
+        [SerializeField] private Canvas interactionCanvas;
 
         private GameObject _currentInteractionMenu;
 
@@ -19,7 +20,7 @@ namespace UI
                 Destroy(_currentInteractionMenu);
 
             // Create and set up the new menu
-            _currentInteractionMenu = Instantiate(interactionMenuPrefab, uiCanvas.transform);
+            _currentInteractionMenu = Instantiate(interactionMenuPrefab, interactionCanvas.transform);
             InteractionMenu menu = _currentInteractionMenu.GetComponent<InteractionMenu>();
 
             if (menu != null)

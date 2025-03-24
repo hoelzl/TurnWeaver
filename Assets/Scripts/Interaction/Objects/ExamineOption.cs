@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Interaction.Objects
 {
-    public class ExamineOption : IInteractionOption
+    public class ExamineOption : InteractionOptionBase
     {
         private readonly string _objectDescription;
         public ExamineOption(IInteractable interactable, string objectDescription)
@@ -12,10 +12,10 @@ namespace Interaction.Objects
             Interactable = interactable;
         }
 
-        public string Text => "Examine";
-        public IInteractable Interactable { get; }
+        public override string Text => "Examine";
+        public override IInteractable Interactable { get; }
 
-        public void Invoke(GameObject source, UIManager uiManager)
+        public override void Invoke(GameObject source, UIManager uiManager)
         {
             Debug.Log("Examine: " + _objectDescription?.ToString() ?? "null");
         }

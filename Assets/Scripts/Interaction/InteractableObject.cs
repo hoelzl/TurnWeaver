@@ -13,6 +13,7 @@ namespace Interaction
         [SerializeField] private bool isLocked;
         [FormerlySerializedAs("requiredKeyItem")] [SerializeField] private string requiredKey = "";
 
+        public string Name => objectName;
         public InteractionOptionSO[] InteractionOptions => interactionOptions;
         public bool AutoInvokeSingleOption => false;
 

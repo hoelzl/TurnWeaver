@@ -3,17 +3,17 @@ using UnityEngine;
 
 namespace Interaction.Objects
 {
-    public class OpenOption : IInteractionOption
+    public class OpenOption : InteractionOptionBase
     {
         public OpenOption(IInteractable interactable)
         {
             Interactable = interactable;
         }
 
-        public string Text => "Open";
-        public IInteractable Interactable { get; }
+        public override string Text => "Open";
+        public override IInteractable Interactable { get; }
 
-        public void Invoke(GameObject source, UIManager uiManager)
+        public override void Invoke(GameObject source, UIManager uiManager)
         {
 
         }

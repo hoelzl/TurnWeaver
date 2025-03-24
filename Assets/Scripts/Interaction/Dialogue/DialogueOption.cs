@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Interaction.Dialogue
 {
-    public class DialogueOption : IInteractionOption
+    public class DialogueOption : InteractionOptionBase
     {
         private string[] _dialogueOptions;
 
@@ -15,10 +15,10 @@ namespace Interaction.Dialogue
             this._dialogueOptions = dialogueOptions;
         }
 
-        public string Text { get; }
-        public IInteractable Interactable { get; }
+        public override string Text { get; }
+        public override IInteractable Interactable { get; }
 
-        public void Invoke(GameObject source, UIManager uiManager)
+        public override void Invoke(GameObject source, UIManager uiManager)
         {
         }
     }
