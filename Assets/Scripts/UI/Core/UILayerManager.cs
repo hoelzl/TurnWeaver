@@ -6,7 +6,28 @@ namespace UI.Core
     public class UILayerManager : MonoBehaviour
     {
         private static UILayerManager _instance;
-        public static UILayerManager Instance => _instance;
+
+        public static UILayerManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    var managerObject = FindObjectOfType<UILayerManager>();
+                    if (managerObject == null)
+                    {
+                        Debug.LogError("No UILayerManager found in scene!");
+                    }
+                    else
+                    {
+                        _instance = managerObject;
+                    }
+                }
+                return _instance;
+            }
+        }
+
+        [SerializeField] private int initializationOrder = -100; // Lower numbers initialize earlier
 
         private readonly Stack<UILayer> _layerStack = new Stack<UILayer>();
         private readonly Dictionary<string, UILayer> _registeredLayers = new Dictionary<string, UILayer>();
@@ -20,7 +41,9 @@ namespace UI.Core
             }
 
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+
+            // Ensure this script runs early in the initialization sequence
+            ScriptExecutionOrder.SetOrder(this, initializationOrder);
         }
 
         public void RegisterLayer(string layerId, UILayer layer)
@@ -32,7 +55,7 @@ namespace UI.Core
             }
 
             _registeredLayers[layerId] = layer;
-            layer.gameObject.SetActive(false); // Hide by default
+            layer.Hide(); // Hide by default
         }
 
         public UILayer GetLayer(string layerId)
@@ -59,7 +82,7 @@ namespace UI.Core
             }
 
             // Activate and show the new layer
-            layer.gameObject.SetActive(true);
+            layer.Show();
             layer.OnLayerPushed();
 
             // Add to stack
@@ -90,6 +113,22 @@ namespace UI.Core
             {
                 PopLayer();
             }
+        }
+    }
+
+
+    // Helper class to set script execution order at runtime
+    public static class ScriptExecutionOrder
+    {
+        public static void SetOrder(MonoBehaviour script, int order)
+        {
+#if UNITY_EDITOR
+            UnityEditor.MonoScript monoScript = UnityEditor.MonoScript.FromMonoBehaviour(script);
+            if (UnityEditor.MonoImporter.GetExecutionOrder(monoScript) != order)
+            {
+                UnityEditor.MonoImporter.SetExecutionOrder(monoScript, order);
+            }
+#endif
         }
     }
 }

@@ -3,27 +3,35 @@ using UnityEngine;
 using UI.Core;
 using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace UI.Layers
 {
     public class InteractionMenuLayer : UILayer
     {
-        [SerializeField] private GameObject optionButtonPrefab;
-        [SerializeField] private Transform optionsContainer;
-        [SerializeField] private Button cancelButton;
+        [SerializeField] private VisualTreeAsset optionButtonTemplate;
 
-        private List<GameObject> _currentOptions = new List<GameObject>();
+        // UI Element References (will be set in SetupUI)
+        private VisualElement _optionsContainer;
+        private Button _cancelButton;
+
+        private List<VisualElement> _currentOptions = new List<VisualElement>();
         private Action<InteractionOptionSO> _onOptionSelected;
         private Action _onCancelled;
 
-        protected override void Awake()
+        protected override void SetupUI()
         {
-            base.Awake();
+            base.SetupUI();
 
-            if (cancelButton != null)
+            if (Root == null) return;
+
+            // Get references to UI elements
+            _optionsContainer = Root.Q<VisualElement>("options-container");
+            _cancelButton = Root.Q<Button>("cancel-button");
+
+            if (_cancelButton != null)
             {
-                cancelButton.onClick.AddListener(OnCancelClicked);
+                _cancelButton.clicked += OnCancelClicked;
             }
         }
 
@@ -40,13 +48,22 @@ namespace UI.Layers
             _onCancelled = onCancelled;
 
             // Position the menu near the world position
-            if (Camera.main != null)
+            if (Camera.main != null && Root != null)
             {
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPosition);
-                RectTransform rectTransform = transform as RectTransform;
-                if (rectTransform != null)
+
+                // Convert to UI position (accounting for screen DPI and UI scaling)
+                var panel = Root.panel;
+                if (panel != null)
                 {
-                    rectTransform.position = screenPos;
+                    Vector2 uiPos = RuntimePanelUtils.ScreenToPanel(panel, screenPos);
+
+                    // Position the options container
+                    if (_optionsContainer != null)
+                    {
+                        _optionsContainer.style.left = uiPos.x;
+                        _optionsContainer.style.top = uiPos.y;
+                    }
                 }
             }
 
@@ -59,31 +76,33 @@ namespace UI.Layers
 
         private void CreateOptionButton(InteractionOptionSO option)
         {
-            if (optionButtonPrefab == null || optionsContainer == null) return;
+            if (optionButtonTemplate == null || _optionsContainer == null) return;
 
-            GameObject buttonGO = Instantiate(optionButtonPrefab, optionsContainer);
-            _currentOptions.Add(buttonGO);
+            // Instantiate the button template
+            TemplateContainer buttonElement = optionButtonTemplate.Instantiate();
+            _currentOptions.Add(buttonElement);
+            _optionsContainer.Add(buttonElement);
 
             // Set up button
-            var button = buttonGO.GetComponent<Button>();
+            Button button = buttonElement.Q<Button>("option-button");
             if (button != null)
             {
-                button.onClick.AddListener(() => OnOptionClicked(option));
+                button.clicked += () => OnOptionClicked(option);
             }
 
             // Set text
-            var buttonText = buttonGO.GetComponentInChildren<Text>();
+            Label buttonText = buttonElement.Q<Label>("option-text");
             if (buttonText != null)
             {
                 buttonText.text = option.Text;
             }
 
             // Set icon if available
-            var buttonImage = buttonGO.GetComponentInChildren<Image>();
-            if (buttonImage != null && option.Icon != null)
+            VisualElement iconElement = buttonElement.Q<VisualElement>("option-icon");
+            if (iconElement != null && option.Icon != null)
             {
-                buttonImage.sprite = option.Icon;
-                buttonImage.enabled = true;
+                iconElement.style.backgroundImage = new StyleBackground(option.Icon);
+                iconElement.style.display = DisplayStyle.Flex;
             }
         }
 
@@ -101,9 +120,11 @@ namespace UI.Layers
 
         private void ClearOptions()
         {
+            if (_optionsContainer == null) return;
+
             foreach (var option in _currentOptions)
             {
-                Destroy(option);
+                _optionsContainer.Remove(option);
             }
             _currentOptions.Clear();
         }

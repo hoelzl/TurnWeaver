@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
     private void Awake()
     {
-        _inputActions = new RPGInputActions();
+        _inputActions ??= new RPGInputActions();
 
         _interactionManager = FindAnyObjectByType<InteractionManager>();
         if (_interactionManager == null)
@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
     private void OnEnable()
     {
+        _inputActions ??= new RPGInputActions();
+
         // Subscribe to input events
         _clickAction = _inputActions.Player.Click;
         _pointAction = _inputActions.Player.Point;
