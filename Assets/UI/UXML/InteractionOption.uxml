@@ -1,4 +1,4 @@
-﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement style="margin: 5px 0;">
         <ui:Button name="option-button" style="padding: 8px; flex-direction: row; align-items: center;">
             <ui:VisualElement name="option-icon" style="width: 24px; height: 24px; margin-right: 8px; display: none;"/>

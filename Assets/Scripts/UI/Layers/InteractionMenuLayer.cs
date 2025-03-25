@@ -48,24 +48,24 @@ namespace UI.Layers
             _onCancelled = onCancelled;
 
             // Position the menu near the world position
-            if (Camera.main != null && Root != null)
-            {
-                Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPosition);
-
-                // Convert to UI position (accounting for screen DPI and UI scaling)
-                var panel = Root.panel;
-                if (panel != null)
-                {
-                    Vector2 uiPos = RuntimePanelUtils.ScreenToPanel(panel, screenPos);
-
-                    // Position the options container
-                    if (_optionsContainer != null)
-                    {
-                        _optionsContainer.style.left = uiPos.x;
-                        _optionsContainer.style.top = uiPos.y;
-                    }
-                }
-            }
+            // if (Camera.main != null && Root != null)
+            // {
+            //     Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPosition);
+            //
+            //     // Convert to UI position (accounting for screen DPI and UI scaling)
+            //     var panel = Root.panel;
+            //     if (panel != null)
+            //     {
+            //         Vector2 uiPos = RuntimePanelUtils.ScreenToPanel(panel, screenPos);
+            //
+            //         // Position the options container
+            //         if (_optionsContainer != null)
+            //         {
+            //             _optionsContainer.style.left = uiPos.x;
+            //             _optionsContainer.style.top = uiPos.y;
+            //         }
+            //     }
+            // }
 
             // Create buttons for each option
             foreach (var option in options)
