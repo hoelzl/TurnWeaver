@@ -167,6 +167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9094595767040569553}
   - component: {fileID: 8933657211859569788}
+  - component: {fileID: 2012367109335924334}
   m_Layer: 5
   m_Name: Interaction Menu
   m_TagString: Untagged
@@ -221,6 +222,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2012367109335924334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8594918888897283424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dac0514524194554aab59519b82639e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonContainer: {fileID: 0}
 --- !u!1001 &5300723292616121809
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,14 +243,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9094595767040569553}
     m_Modifications:
-    - target: {fileID: 2366983535974861717, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}
-      propertyPath: m_ChildScaleWidth
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2366983535974861717, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}
-      propertyPath: m_ChildScaleHeight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3043420359618335137, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -321,40 +327,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button Container
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8879456435663314762, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4840202058515880122, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1310602165432939401}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}
---- !u!1 &766783881829533035 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4840202058515880122, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}
-  m_PrefabInstance: {fileID: 5300723292616121809}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1310602165432939401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 766783881829533035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: 3
-  m_LayoutPriority: 3
 --- !u!224 &7184250143959141488 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3043420359618335137, guid: 12c67e21ce3a3794c948a5604e67d374, type: 3}

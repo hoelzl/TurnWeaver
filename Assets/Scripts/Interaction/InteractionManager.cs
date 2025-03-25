@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 namespace Interaction
 {
-    public class InteractionManager : MonoBehaviour, IInteractionSystem
+    public class InteractionManager : MonoBehaviour
     {
         [SerializeField] private GameObject interactionSource;
         [SerializeField] private UIManager uiManager;

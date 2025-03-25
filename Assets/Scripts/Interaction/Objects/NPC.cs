@@ -1,7 +1,6 @@
-﻿using Interaction.Objects;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Interaction
+namespace Interaction.Objects
 {
     public class NPC : MonoBehaviour, IInteractable
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class ButtonBox : MonoBehaviour
+    public class ButtonContainer : MonoBehaviour
     {
         [SerializeField] private GameObject buttonPrefab;
 
@@ -31,7 +31,8 @@ namespace UI
         {
             if (option == null) return;
 
-            GameObject buttonObj = Instantiate(buttonPrefab, transform);
+            GameObject buttonObj = Instantiate(buttonPrefab);
+            buttonObj.transform.SetParent(transform, false);
             _buttons.Add(buttonObj);
 
             // Set up the button

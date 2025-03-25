@@ -1,10 +1,9 @@
 ﻿// For containers and usable objects
 
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Interaction
+namespace Interaction.Objects
 {
     public class InteractableObject : MonoBehaviour, IInteractable
     {

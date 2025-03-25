@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Interaction;
+using Interaction.Objects;
 using UnityEngine;
 
 public enum TurnState { PlayerTurn, EnemyTurn, Transitioning }

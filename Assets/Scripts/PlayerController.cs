@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
     private bool _isInteracting;
     private Vector3 _targetDestination;
     private bool _hasPendingDestination;
-    private IInteractionSystem _interactionSystem;
+    private InteractionManager _interactionManager;
     private Coroutine _interactionTimeoutCoroutine;
 
     // Animation parameter hashes
@@ -45,12 +45,10 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
     private void Awake()
     {
-        // Initialize input actions
         _inputActions = new RPGInputActions();
 
-        // Get the interaction system
-        _interactionSystem = FindAnyObjectByType<InteractionManager>();
-        if (_interactionSystem == null)
+        _interactionManager = FindAnyObjectByType<InteractionManager>();
+        if (_interactionManager == null)
             Debug.LogError("InteractionManager not found in scene!");
     }
 
@@ -144,8 +142,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
         if (interactable == null) return;
 
         // IMPORTANT FIX: Always register with the interaction manager
-        InteractionManager interactionManager = _interactionSystem as InteractionManager;
-        interactionManager?.SetInteractionSource(this.gameObject);
+        _interactionManager?.SetInteractionSource(this.gameObject);
 
         // Calculate distance to interactable
         float distanceToTarget = Vector3.Distance(transform.position, hit.point);
@@ -161,7 +158,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
             _interactionTimeoutCoroutine = StartCoroutine(InteractionTimeout(5.0f));
 
-            _interactionSystem.ShowInteractionOptions(interactable, hit.point);
+            _interactionManager?.ShowInteractionOptions(interactable, hit.point);
             // NOTE: InteractionManager will call our FinalizeInteraction when done
         }
         else
@@ -292,7 +289,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
             // Now we can interact
             _isInteracting = true;
-            _interactionSystem.ShowInteractionOptions(interactable, targetPos);
+            _interactionManager?.ShowInteractionOptions(interactable, targetPos);
         }
     }
 
