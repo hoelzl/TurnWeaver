@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="interaction-menu-root" style="flex-grow: 0; position: absolute; width: 400px; height: auto; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: 20%; align-self: center;">
-        <ui:VisualElement name="interaction-buttons-container" style="border-radius: 5px; padding: 10px; align-items: stretch; justify-content: flex-end;" />
-        <ui:Button name="cancel-button" text="Cancel" style="padding: 10px 20px; border-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-right: 12px; margin-bottom: 12px; margin-left: 12px; margin-top: 12px;" />
+    <ui:VisualElement name="interaction-menu-root" enabled="true" style="flex-grow: 0; position: absolute; width: 400px; height: auto; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: 20%; align-self: center;">
+        <ui:VisualElement name="interaction-buttons-container" enabled="true" style="border-radius: 5px; padding: 10px; align-items: stretch; justify-content: flex-end;" />
+        <ui:Button name="cancel-button" text="Cancel" enabled="true" style="padding: 10px 20px; border-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-right: 12px; margin-bottom: 12px; margin-left: 12px; margin-top: 12px;" />
     </ui:VisualElement>
 </ui:UXML>
