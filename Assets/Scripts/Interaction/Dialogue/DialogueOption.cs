@@ -18,7 +18,7 @@ namespace Interaction.Dialogue
         public override string Text { get; }
         public override IInteractable Interactable { get; }
 
-        public override void Invoke(GameObject source, UIManager uiManager)
+        public override void Invoke(GameObject source)
         {
         }
     }

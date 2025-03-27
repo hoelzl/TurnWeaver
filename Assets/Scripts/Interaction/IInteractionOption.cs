@@ -1,4 +1,5 @@
 ﻿using UI;
+using UI.Core;
 using UnityEngine;
 
 namespace Interaction
@@ -8,6 +9,6 @@ namespace Interaction
         string Text { get; }
         Sprite Icon { get; }
         IInteractable Interactable { get; }
-        void Invoke(GameObject source, UIManager uiManager);
+        void Invoke(GameObject source);
     }
 }

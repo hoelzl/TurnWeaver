@@ -15,7 +15,7 @@ namespace Interaction.Objects
         public override string Text => "Examine";
         public override IInteractable Interactable { get; }
 
-        public override void Invoke(GameObject source, UIManager uiManager)
+        public override void Invoke(GameObject source)
         {
             Debug.Log("Examine: " + _objectDescription?.ToString() ?? "null");
         }

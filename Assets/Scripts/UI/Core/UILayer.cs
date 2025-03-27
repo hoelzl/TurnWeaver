@@ -16,23 +16,20 @@ namespace UI.Core
             if (uiDocument == null)
             {
                 uiDocument = GetComponent<UIDocument>();
-                if (uiDocument == null)
-                {
-                    Debug.LogError($"UILayer {layerId} is missing UIDocument component!");
-                    return;
-                }
             }
         }
 
         protected virtual void Start()
         {
-            // Register with manager and setup UI after all Awake calls are complete
-            UILayerManager.Instance?.RegisterLayer(layerId, this);
-            SetupUI();
+            if (uiDocument == null)
+            {
+                Debug.LogError($"Cannot register UILayer {layerId} since it is missing a UIDocument component!");
+                return;
+            }
 
-            // IMPORTANT: Make sure we start hidden
-            Hide();
-        }
+            SetupUI();
+            UILayerManager.Instance?.RegisterLayer(this);
+       }
 
         protected virtual void SetupUI()
         {
@@ -41,18 +38,8 @@ namespace UI.Core
 
         public virtual void Show()
         {
-            if (uiDocument != null)
-            {
-                uiDocument.enabled = true;
+            uiDocument.enabled = true;
 
-                // Wait one frame to ensure root visual element is available
-                StartCoroutine(ShowNextFrame());
-            }
-        }
-
-        private System.Collections.IEnumerator ShowNextFrame()
-        {
-            yield return null;
             if (Root != null)
             {
                 Root.style.display = DisplayStyle.Flex;

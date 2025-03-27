@@ -228,7 +228,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1031461106}
-  - {fileID: 2140761750}
   - {fileID: 1428300344}
   - {fileID: 61830285}
   - {fileID: 1626836790}
@@ -972,7 +971,6 @@ GameObject:
   - component: {fileID: 1076231127}
   - component: {fileID: 1076231129}
   - component: {fileID: 1076231128}
-  - component: {fileID: 1076231130}
   m_Layer: 0
   m_Name: InteractionMenu
   m_TagString: Untagged
@@ -1029,18 +1027,6 @@ MonoBehaviour:
   layerId: InteractionMenu
   uiDocument: {fileID: 1076231128}
   optionButtonTemplate: {fileID: 9197481963319205126, guid: 2c672b240f81479dae5c9b52f30ee82c, type: 3}
---- !u!114 &1076231130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1076231126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b89f4101501a4b1db40080b5172d6360, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1115364202
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1237,7 +1223,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1258544123}
-  - component: {fileID: 1258544122}
   m_Layer: 0
   m_Name: UIRoot
   m_TagString: Untagged
@@ -1245,19 +1230,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1258544122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1258544121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30a680e2e026420f96412bc3a9609a5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initializationOrder: -100
 --- !u!4 &1258544123
 Transform:
   m_ObjectHideFlags: 0
@@ -1369,7 +1341,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionSource: {fileID: 481040741827451072}
-  uiManager: {fileID: 2140761749}
 --- !u!1 &2050917824
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,50 +1553,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LookAtOffset: {x: 0, y: 0, z: 0}
---- !u!1 &2140761748
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2140761750}
-  - component: {fileID: 2140761749}
-  m_Layer: 0
-  m_Name: UI Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2140761749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2140761748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fe8e214c7ee41a48bcb5abdfac18e54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &2140761750
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2140761748}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 65954820}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &481040741827451071
 PrefabInstance:
   m_ObjectHideFlags: 0

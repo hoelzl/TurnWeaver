@@ -1,4 +1,5 @@
 ﻿using UI;
+using UI.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,18 +8,11 @@ namespace Interaction
     public class InteractionManager : MonoBehaviour
     {
         [SerializeField] private GameObject interactionSource;
-        [SerializeField] private UIManager uiManager;
 
         private IInteractionSource _interactionSourceComponent;
 
         private void Awake()
         {
-            if (uiManager == null)
-            {
-                uiManager = FindAnyObjectByType<UIManager>();
-                if (uiManager == null)
-                    Debug.LogError("UIManager not specified and not found in scene!");
-            }
             _interactionSourceComponent = interactionSource.GetComponent<IInteractionSource>();
         }
 
@@ -47,7 +41,7 @@ namespace Interaction
                     break;
                 }
                 default:
-                    uiManager.ShowInteractionMenu(options, worldPosition,
+                    UIManager.Instance.ShowInteractionMenu(options,
                         (optionSO) => { InteractWithOption(interactable, optionSO); },
                         () => CancelInteraction(interactable));
                     break;
@@ -57,13 +51,13 @@ namespace Interaction
         private void InteractWithOption(IInteractable interactable, InteractionOptionSO optionSO)
         {
             IInteractionOption option = optionSO.CreateInstance(interactable);
-            option.Invoke(interactionSource, uiManager);
+            option.Invoke(interactionSource);
             _interactionSourceComponent.FinalizeInteraction(interactable);
         }
 
         private void CancelInteraction(IInteractable interactable)
         {
-            uiManager.CloseInteractionMenu();
+            UIManager.Instance.CloseInteractionMenu();
             _interactionSourceComponent?.FinalizeInteraction(interactable);
         }
 

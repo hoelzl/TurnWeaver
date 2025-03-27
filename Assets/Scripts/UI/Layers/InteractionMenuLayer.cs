@@ -12,10 +12,10 @@ namespace UI.Layers
         [SerializeField] private VisualTreeAsset optionButtonTemplate;
 
         // UI Element References (will be set in SetupUI)
-        private VisualElement _optionsContainer;
+        private VisualElement _interactionButtonsContainer;
         private Button _cancelButton;
 
-        private List<VisualElement> _currentOptions = new List<VisualElement>();
+        private readonly List<Button> _interactionButtons = new();
         private Action<InteractionOptionSO> _onOptionSelected;
         private Action _onCancelled;
 
@@ -26,7 +26,7 @@ namespace UI.Layers
             if (Root == null) return;
 
             // Get references to UI elements
-            _optionsContainer = Root.Q<VisualElement>("options-container");
+            _interactionButtonsContainer = Root.Q<VisualElement>("interaction-buttons-container");
             _cancelButton = Root.Q<Button>("cancel-button");
 
             if (_cancelButton != null)
@@ -35,9 +35,8 @@ namespace UI.Layers
             }
         }
 
-        public void SetOptions(
+        public void SetInteractionOptions(
             InteractionOptionSO[] options,
-            Vector3 worldPosition,
             Action<InteractionOptionSO> onOptionSelected,
             Action onCancelled)
         {
@@ -46,26 +45,6 @@ namespace UI.Layers
 
             _onOptionSelected = onOptionSelected;
             _onCancelled = onCancelled;
-
-            // Position the menu near the world position
-            // if (Camera.main != null && Root != null)
-            // {
-            //     Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPosition);
-            //
-            //     // Convert to UI position (accounting for screen DPI and UI scaling)
-            //     var panel = Root.panel;
-            //     if (panel != null)
-            //     {
-            //         Vector2 uiPos = RuntimePanelUtils.ScreenToPanel(panel, screenPos);
-            //
-            //         // Position the options container
-            //         if (_optionsContainer != null)
-            //         {
-            //             _optionsContainer.style.left = uiPos.x;
-            //             _optionsContainer.style.top = uiPos.y;
-            //         }
-            //     }
-            // }
 
             // Create buttons for each option
             foreach (var option in options)
@@ -76,29 +55,34 @@ namespace UI.Layers
 
         private void CreateOptionButton(InteractionOptionSO option)
         {
-            if (optionButtonTemplate == null || _optionsContainer == null) return;
+            if (optionButtonTemplate == null || _interactionButtonsContainer == null) return;
 
             // Instantiate the button template
             TemplateContainer buttonElement = optionButtonTemplate.Instantiate();
-            _currentOptions.Add(buttonElement);
-            _optionsContainer.Add(buttonElement);
+            _interactionButtonsContainer.Add(buttonElement);
 
+            SetupInteractionOptionButton(buttonElement, option);
+        }
+
+        private void SetupInteractionOptionButton(TemplateContainer buttonElement, InteractionOptionSO option)
+        {
             // Set up button
-            Button button = buttonElement.Q<Button>("option-button");
+            var button = buttonElement.Q<Button>("option-button");
             if (button != null)
             {
+                _interactionButtons.Add(button);
                 button.clicked += () => OnOptionClicked(option);
             }
 
             // Set text
-            Label buttonText = buttonElement.Q<Label>("option-text");
+            var buttonText = buttonElement.Q<Label>("option-text");
             if (buttonText != null)
             {
                 buttonText.text = option.Text;
             }
 
             // Set icon if available
-            VisualElement iconElement = buttonElement.Q<VisualElement>("option-icon");
+            var iconElement = buttonElement.Q<VisualElement>("option-icon");
             if (iconElement != null && option.Icon != null)
             {
                 iconElement.style.backgroundImage = new StyleBackground(option.Icon);
@@ -108,25 +92,20 @@ namespace UI.Layers
 
         private void OnOptionClicked(InteractionOptionSO option)
         {
+            UILayerManager.Instance.PopLayer();
             _onOptionSelected?.Invoke(option);
-            UILayerManager.Instance.PopLayer(); // Close the menu
         }
 
         private void OnCancelClicked()
         {
+            UILayerManager.Instance.PopLayer();
             _onCancelled?.Invoke();
-            UILayerManager.Instance.PopLayer(); // Close the menu
         }
 
         private void ClearOptions()
         {
-            if (_optionsContainer == null) return;
-
-            foreach (var option in _currentOptions)
-            {
-                _optionsContainer.Remove(option);
-            }
-            _currentOptions.Clear();
+            _interactionButtonsContainer.Clear();
+            _interactionButtons.Clear();
         }
 
         public override void OnLayerPopped()
@@ -134,5 +113,6 @@ namespace UI.Layers
             base.OnLayerPopped();
             ClearOptions();
         }
+
     }
 }

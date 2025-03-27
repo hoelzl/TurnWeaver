@@ -11,6 +11,6 @@ namespace Interaction
         public Sprite Icon => this._icon;
 
         public abstract IInteractable Interactable { get; }
-        public abstract void Invoke(GameObject source, UIManager uiManager);
+        public abstract void Invoke(GameObject source);
     }
 }

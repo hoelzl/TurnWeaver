@@ -13,7 +13,7 @@ namespace Interaction.Objects
         public override string Text => "Open";
         public override IInteractable Interactable { get; }
 
-        public override void Invoke(GameObject source, UIManager uiManager)
+        public override void Invoke(GameObject source)
         {
 
         }
