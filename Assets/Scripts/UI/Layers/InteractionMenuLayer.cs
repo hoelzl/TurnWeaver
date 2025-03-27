@@ -79,14 +79,14 @@ namespace UI.Layers
 
         private void OnOptionClicked(InteractionOptionSO option)
         {
-            _onOptionSelected?.Invoke(option);
             UILayerManager.Instance.PopLayer();
+            _onOptionSelected?.Invoke(option);
         }
 
         private void OnCancelClicked()
         {
-            _onCancelled?.Invoke();
             UILayerManager.Instance.PopLayer();
+            _onCancelled?.Invoke();
         }
 
         public override void OnLayerPopped()
@@ -97,6 +97,7 @@ namespace UI.Layers
 
         private void ClearOptions()
         {
+            // TODO: Check widget lifecycle; we probably need to clean up better
             _interactionButtonsContainer.Clear();
             _interactionButtons.Clear();
         }

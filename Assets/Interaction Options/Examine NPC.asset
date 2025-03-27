@@ -13,4 +13,13 @@ MonoBehaviour:
   m_Name: Examine NPC
   m_EditorClassIdentifier: 
   optionText: Examine
-  objectDescription: This is a NPC
+  icon: {fileID: 0}
+  objectDescription: '<b>A Non-Player Character</b>
+
+
+    This is a non-player Character.
+    It is a very important object in the game and therefore has a <i>long</i> description
+    spanning multiple paragraphs.
+
+
+    <i>Multiple paragraphs!</i>'

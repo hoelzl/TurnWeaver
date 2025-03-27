@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Input;
 using UnityEngine;
 
 namespace UI.Core
@@ -9,6 +10,7 @@ namespace UI.Core
 
         public static UILayerManager Instance => _instance ??= new UILayerManager();
         public static bool HasTopLayer(string layerName) => Instance.TopLayer?.LayerId == layerName;
+        public static int ActiveLayerCount => Instance._layerStack.Count;
 
         private readonly Stack<UILayer> _layerStack = new();
         private readonly Dictionary<string, UILayer> _registeredLayers = new();
@@ -56,6 +58,7 @@ namespace UI.Core
             if (_layerStack.Count == 0) return;
 
             UILayer topLayer = _layerStack.Pop();
+            topLayer.Hide();
             topLayer.OnLayerPopped();
 
             if (_layerStack.Count > 0)

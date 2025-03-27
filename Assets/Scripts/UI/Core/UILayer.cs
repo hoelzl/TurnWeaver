@@ -61,13 +61,11 @@ namespace UI.Core
         // Called when this layer is pushed onto the stack
         public virtual void OnLayerPushed()
         {
-            Show();
         }
 
         // Called when this layer is popped from the stack
         public virtual void OnLayerPopped()
         {
-            Hide();
         }
 
         // Called when another layer is pushed on top

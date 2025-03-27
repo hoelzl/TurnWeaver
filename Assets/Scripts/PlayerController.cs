@@ -29,11 +29,9 @@ public class PlayerController : MonoBehaviour, IInteractionSource
     private Animator _animator;
     private GameObject _selectionMarker;
     private Camera _camera;
-    private bool _isInteracting;
     private Vector3 _targetDestination;
     private bool _hasPendingDestination;
     private InteractionManager _interactionManager;
-    private Coroutine _interactionTimeoutCoroutine;
 
     // Animation parameter hashes
     private readonly int _moveSpeedParam = Animator.StringToHash("MoveSpeed");
@@ -58,13 +56,13 @@ public class PlayerController : MonoBehaviour, IInteractionSource
         _inputActions ??= new RPGInputActions();
 
         // Subscribe to input events
-        _clickAction = _inputActions.Player.Click;
-        _pointAction = _inputActions.Player.Point;
+        _clickAction = _inputActions.Gameplay.Click;
+        _pointAction = _inputActions.Gameplay.Point;
 
         _clickAction.performed += OnClick;
 
         // Enable the action map
-        _inputActions.Player.Enable();
+        _inputActions.Gameplay.Enable();
     }
 
     private void OnDisable()
@@ -73,7 +71,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
         _clickAction.performed -= OnClick;
 
         // Disable the action map
-        _inputActions.Player.Disable();
+        _inputActions.Gameplay.Disable();
     }
 
     private void Start()
@@ -115,10 +113,13 @@ public class PlayerController : MonoBehaviour, IInteractionSource
         }
     }
 
+    private bool _isInteractionBlocked;
+    private bool IsInteractionBlocked => _isInteractionBlocked || UILayerManager.ActiveLayerCount > 0;
+
     private void OnClick(InputAction.CallbackContext context)
     {
-        // Only handle clicks when not already in an interaction
-        if (_isInteracting) return;
+        // Only handle clicks when the interaction is not blocked
+        if (IsInteractionBlocked) return;
 
         // Get mouse position from the Point action
         Vector2 mousePosition = _pointAction.ReadValue<Vector2>();
@@ -152,13 +153,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
         // If already within range, interact immediately
         if (distanceToTarget <= interactionRange)
         {
-            _isInteracting = true;
-
-            // Start timeout safety
-            if (_interactionTimeoutCoroutine != null)
-                StopCoroutine(_interactionTimeoutCoroutine);
-
-            _interactionTimeoutCoroutine = StartCoroutine(InteractionTimeout(30.0f));
+            _isInteractionBlocked = true;
 
             _interactionManager?.ShowInteractionOptions(interactable, hit.point);
             // NOTE: InteractionManager will call our FinalizeInteraction when done
@@ -188,15 +183,6 @@ public class PlayerController : MonoBehaviour, IInteractionSource
             // Start coroutine to wait until in range
             StartCoroutine(MoveToInteractable(interactable, targetPos));
         }
-    }
-
-    private IEnumerator InteractionTimeout(float timeout)
-    {
-        yield return new WaitForSeconds(timeout);
-        Debug.LogWarning("Interaction timeout - resetting state");
-        _isInteracting = false;
-        _interactionTimeoutCoroutine = null;
-        UIManager.Instance.CloseInteractionMenu();
     }
 
     private void HandleGroundHit(RaycastHit hit)
@@ -291,7 +277,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
             transform.rotation = Quaternion.LookRotation(lookDirection);
 
             // Now we can interact
-            _isInteracting = true;
+            _isInteractionBlocked = true;
             _interactionManager?.ShowInteractionOptions(interactable, targetPos);
         }
     }
@@ -303,10 +289,8 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
     public void FinalizeInteraction(IInteractable interactable)
     {
-        Debug.Log("Interaction complete - releasing player control");
-        if (_interactionTimeoutCoroutine != null)
-            StopCoroutine(_interactionTimeoutCoroutine);
-        _isInteracting = false;
+        Debug.Log("Interaction complete.");
+        _isInteractionBlocked = false;
     }
 
     public void StopMoving()
