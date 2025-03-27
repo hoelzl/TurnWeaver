@@ -49,11 +49,11 @@ namespace UI.Layers
             // Create buttons for each option
             foreach (var option in options)
             {
-                CreateOptionButton(option);
+                CreateInteractionOptionButton(option);
             }
         }
 
-        private void CreateOptionButton(InteractionOptionSO option)
+        private void CreateInteractionOptionButton(InteractionOptionSO option)
         {
             if (optionButtonTemplate == null || _interactionButtonsContainer == null) return;
 
@@ -72,40 +72,21 @@ namespace UI.Layers
             {
                 _interactionButtons.Add(button);
                 button.clicked += () => OnOptionClicked(option);
-            }
-
-            // Set text
-            var buttonText = buttonElement.Q<Label>("option-text");
-            if (buttonText != null)
-            {
-                buttonText.text = option.Text;
-            }
-
-            // Set icon if available
-            var iconElement = buttonElement.Q<VisualElement>("option-icon");
-            if (iconElement != null && option.Icon != null)
-            {
-                iconElement.style.backgroundImage = new StyleBackground(option.Icon);
-                iconElement.style.display = DisplayStyle.Flex;
+                button.text = option.Text;
+                // TODO: Add icon to button if available!
             }
         }
 
         private void OnOptionClicked(InteractionOptionSO option)
         {
-            UILayerManager.Instance.PopLayer();
             _onOptionSelected?.Invoke(option);
+            UILayerManager.Instance.PopLayer();
         }
 
         private void OnCancelClicked()
         {
-            UILayerManager.Instance.PopLayer();
             _onCancelled?.Invoke();
-        }
-
-        private void ClearOptions()
-        {
-            _interactionButtonsContainer.Clear();
-            _interactionButtons.Clear();
+            UILayerManager.Instance.PopLayer();
         }
 
         public override void OnLayerPopped()
@@ -114,5 +95,10 @@ namespace UI.Layers
             ClearOptions();
         }
 
+        private void ClearOptions()
+        {
+            _interactionButtonsContainer.Clear();
+            _interactionButtons.Clear();
+        }
     }
 }

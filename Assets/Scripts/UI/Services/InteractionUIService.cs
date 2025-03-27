@@ -33,13 +33,15 @@ namespace UI.Services
 
         public void CloseInteractionMenu()
         {
-            // If the top layer is the interaction menu, pop it
-            UILayer currentLayer = UILayerManager.Instance.GetCurrentLayer();
-            if (currentLayer == null || currentLayer.LayerId != InteractionMenuLayerId)
+            // The interaction options should already have closed the interaction menu.
+            // Do nothing if this is the case.
+
+            if (!UILayerManager.HasTopLayer(InteractionMenuLayerId))
             {
-                Debug.LogWarning($"Trying to close interaction menu, but got Layer {currentLayer.LayerId}!");
                 return;
             }
+
+            Debug.LogWarning("Interaction did not close its interaction menu");
             UILayerManager.Instance.PopLayer();
         }
     }

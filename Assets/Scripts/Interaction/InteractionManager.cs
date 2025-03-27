@@ -57,7 +57,7 @@ namespace Interaction
 
         private void CancelInteraction(IInteractable interactable)
         {
-            UIManager.Instance.CloseInteractionMenu();
+            // Nothing to do...
             _interactionSourceComponent?.FinalizeInteraction(interactable);
         }
 

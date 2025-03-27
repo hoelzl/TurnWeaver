@@ -8,6 +8,7 @@ namespace UI.Core
         private static UILayerManager _instance;
 
         public static UILayerManager Instance => _instance ??= new UILayerManager();
+        public static bool HasTopLayer(string layerName) => Instance.TopLayer?.LayerId == layerName;
 
         private readonly Stack<UILayer> _layerStack = new();
         private readonly Dictionary<string, UILayer> _registeredLayers = new();
@@ -64,7 +65,7 @@ namespace UI.Core
             }
         }
 
-        public UILayer GetCurrentLayer() => _layerStack.Count > 0 ? _layerStack.Peek() : null;
+        public UILayer TopLayer => _layerStack.Count > 0 ? _layerStack.Peek() : null;
 
         public void PopAllLayers()
         {

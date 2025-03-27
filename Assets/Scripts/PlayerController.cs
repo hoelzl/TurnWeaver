@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Interaction;
+using UI.Core;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -143,10 +144,9 @@ public class PlayerController : MonoBehaviour, IInteractionSource
         IInteractable interactable = hit.collider.GetComponent<IInteractable>();
         if (interactable == null) return;
 
-        // IMPORTANT FIX: Always register with the interaction manager
+        // Always register with the interaction manager
         _interactionManager?.SetInteractionSource(this.gameObject);
 
-        // Calculate distance to interactable
         float distanceToTarget = Vector3.Distance(transform.position, hit.point);
 
         // If already within range, interact immediately
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
             if (_interactionTimeoutCoroutine != null)
                 StopCoroutine(_interactionTimeoutCoroutine);
 
-            _interactionTimeoutCoroutine = StartCoroutine(InteractionTimeout(5.0f));
+            _interactionTimeoutCoroutine = StartCoroutine(InteractionTimeout(30.0f));
 
             _interactionManager?.ShowInteractionOptions(interactable, hit.point);
             // NOTE: InteractionManager will call our FinalizeInteraction when done
@@ -196,6 +196,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
         Debug.LogWarning("Interaction timeout - resetting state");
         _isInteracting = false;
         _interactionTimeoutCoroutine = null;
+        UIManager.Instance.CloseInteractionMenu();
     }
 
     private void HandleGroundHit(RaycastHit hit)
