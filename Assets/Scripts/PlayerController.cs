@@ -157,6 +157,8 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
             _interactionManager?.ShowInteractionOptions(interactable, hit.point);
             // NOTE: InteractionManager will call our FinalizeInteraction when done
+            _isInteractionBlocked = false;
+
         }
         else
         {
@@ -290,7 +292,6 @@ public class PlayerController : MonoBehaviour, IInteractionSource
     public void FinalizeInteraction(IInteractable interactable)
     {
         Debug.Log("Interaction complete.");
-        _isInteractionBlocked = false;
     }
 
     public void StopMoving()

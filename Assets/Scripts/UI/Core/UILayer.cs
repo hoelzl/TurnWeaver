@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace UI.Core
 {
     public abstract class UILayer : MonoBehaviour
     {
-        [SerializeField] private string layerId;
+        [SerializeField] private string layerName;
         [SerializeField] protected UIDocument uiDocument;
 
-        public string LayerId => layerId;
+        public string LayerName => layerName;
         protected VisualElement Root => uiDocument?.rootVisualElement;
         private readonly Stack<int> _stackPositions = new();
 
@@ -25,13 +26,23 @@ namespace UI.Core
         {
             if (uiDocument == null)
             {
-                Debug.LogError($"Cannot register UILayer {layerId} since it is missing a UIDocument component!");
+                Debug.LogError($"UILayer {layerName} is missing a UIDocument component!");
                 return;
             }
 
             SetupUI();
-            UILayerManager.Instance?.RegisterLayer(this);
-       }
+        }
+
+        // Initialize the layer after being instantiated
+        public virtual void Initialize()
+        {
+            if (uiDocument == null)
+            {
+                uiDocument = GetComponent<UIDocument>();
+            }
+
+            SetupUI();
+        }
 
         protected virtual void SetupUI()
         {
@@ -72,9 +83,9 @@ namespace UI.Core
         // Called when this layer is popped from the stack
         public virtual void OnLayerPopped()
         {
-            if (_stackPositions.TryPop(out int newStackPosition))
+            if (_stackPositions.TryPop(out int position))
             {
-                uiDocument.sortingOrder = newStackPosition;
+                uiDocument.sortingOrder = position;
             }
             else
             {

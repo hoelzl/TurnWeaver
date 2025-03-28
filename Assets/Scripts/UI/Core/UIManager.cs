@@ -7,34 +7,66 @@ namespace UI.Core
     public static class UIManager
     {
         public static string InteractionMenuLayerName => "InteractionMenu";
+        public static string DescriptionLayerName => "Description";
+
+        // Optional method to register additional layer prefabs at runtime
+        public static void RegisterLayerPrefab(string layerId, GameObject prefab)
+        {
+            if (UILayerManager.Instance != null)
+            {
+                UILayerManager.Instance.RegisterLayerPrefab(layerId, prefab);
+            }
+            else
+            {
+                Debug.LogError("UILayerManager instance not found!");
+            }
+        }
 
         public static void ShowInteractionMenu(
             InteractionOptionSO[] options,
             System.Action<InteractionOptionSO> onOptionSelected,
             System.Action onCancelled)
         {
-            var interactionMenuLayer = UILayerManager.Instance.GetLayer(InteractionMenuLayerName) as InteractionMenuLayer;
-            if (interactionMenuLayer == null)
+            if (UILayerManager.Instance == null)
             {
-                Debug.LogError("InteractionMenuLayer not found!");
+                Debug.LogError("UILayerManager instance not found!");
                 return;
             }
-            interactionMenuLayer.SetInteractionOptions(options, onOptionSelected, onCancelled);
-            UILayerManager.Instance.PushLayer(InteractionMenuLayerName);
-        }
 
-        public static string DescriptionLayerName => "Description";
+            UILayerManager.Instance.PushLayer(InteractionMenuLayerName, layer =>
+            {
+                var interactionMenuLayer = layer as InteractionMenuLayer;
+                if (interactionMenuLayer != null)
+                {
+                    interactionMenuLayer.SetInteractionOptions(options, onOptionSelected, onCancelled);
+                }
+                else
+                {
+                    Debug.LogError($"Layer is not an InteractionMenuLayer: {layer.LayerName}");
+                }
+            });
+        }
 
         public static void ShowDescription(string description)
         {
-            var descriptionLayer = UILayerManager.Instance.GetLayer(DescriptionLayerName) as DescriptionLayer;
-            if (descriptionLayer == null)
+            if (UILayerManager.Instance == null)
             {
-                Debug.LogError("Description layer not found!");
+                Debug.LogError("UILayerManager instance not found!");
                 return;
             }
-            descriptionLayer.SetDescription(description);
-            UILayerManager.Instance.PushLayer(DescriptionLayerName);
+
+            UILayerManager.Instance.PushLayer(DescriptionLayerName, layer =>
+            {
+                var descriptionLayer = layer as DescriptionLayer;
+                if (descriptionLayer != null)
+                {
+                    descriptionLayer.SetDescription(description);
+                }
+                else
+                {
+                    Debug.LogError($"Layer is not a DescriptionLayer: {layer.LayerName}");
+                }
+            });
         }
     }
 }

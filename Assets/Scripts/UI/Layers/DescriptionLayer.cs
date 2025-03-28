@@ -11,6 +11,12 @@ namespace UI.Layers
 
         private Action _onCompleted;
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            // Any additional initialization specific to DescriptionLayer
+        }
+
         protected override void SetupUI()
         {
             base.SetupUI();
@@ -27,13 +33,25 @@ namespace UI.Layers
 
         public void SetDescription(string description)
         {
-            _text.text = description;
+            if (_text != null)
+            {
+                _text.text = description;
+            }
         }
 
         private void OnOkClicked()
         {
             _onCompleted?.Invoke();
             UILayerManager.Instance.PopLayer();
+        }
+
+        private void OnDestroy()
+        {
+            // Clean up any event subscriptions
+            if (_okButton != null)
+            {
+                _okButton.clicked -= OnOkClicked;
+            }
         }
     }
 }

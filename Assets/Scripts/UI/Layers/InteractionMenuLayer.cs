@@ -79,27 +79,40 @@ namespace UI.Layers
 
         private void OnOptionClicked(InteractionOptionSO option)
         {
+            var selectedOption = option;
+            var callback = _onOptionSelected;
+
             UILayerManager.Instance.PopLayer();
-            _onOptionSelected?.Invoke(option);
+            callback?.Invoke(selectedOption);
         }
 
         private void OnCancelClicked()
         {
-            UILayerManager.Instance.PopLayer();
-            _onCancelled?.Invoke();
-        }
+            var callback = _onCancelled;
 
-        public override void OnLayerPopped()
-        {
-            base.OnLayerPopped();
-            ClearOptions();
+            UILayerManager.Instance.PopLayer();
+            callback?.Invoke();
         }
 
         private void ClearOptions()
         {
-            // TODO: Check widget lifecycle; we probably need to clean up better
-            _interactionButtonsContainer.Clear();
+            if (_interactionButtonsContainer != null)
+            {
+                _interactionButtonsContainer.Clear();
+            }
             _interactionButtons.Clear();
+        }
+
+        private void OnDestroy()
+        {
+            // Clean up any event subscriptions
+            if (_cancelButton != null)
+            {
+                _cancelButton.clicked -= OnCancelClicked;
+            }
+
+            // Clear buttons
+            ClearOptions();
         }
     }
 }
