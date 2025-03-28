@@ -2,21 +2,32 @@
 using TurnHandling;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace Player
 {
     [RequireComponent(typeof(NavMeshAgent))]
     public class PlayerMovement : MonoBehaviour
     {
+        [Header("Movement Settings")]
         [SerializeField] private float turnSpeed = 10f;
         [SerializeField] private float moveSpeed = 10f;
         [SerializeField] private float stoppingDistance = 0.1f;
-        [SerializeField] private GameObject selectionMarkerPrefab;
+        [FormerlySerializedAs("selectionMarkerPrefab")] [SerializeField]
+        private GameObject targetMarkerPrefab;
         [SerializeField] private bool debugPath;
+
+        [Header("Stuck Detection")]
+        [SerializeField] private float stuckDetectionTime = 2.0f; // Time before considering stuck
+        [SerializeField] private float stuckDetectionDistance = 0.1f; // Minimum progress needed
+
+        private Vector3 _lastProgressPosition;
+        private float _stuckTimer;
+        private bool _isCheckingStuck;
 
         private NavMeshAgent _agent;
         private Animator _animator;
-        private GameObject _selectionMarker;
+        private GameObject _targetMarker;
         private Vector3 _targetDestination;
         private bool _hasPendingDestination;
 
@@ -24,7 +35,49 @@ namespace Player
         private readonly int _moveSpeedParam = Animator.StringToHash("MoveSpeed");
         private readonly int _isMovingParam = Animator.StringToHash("IsMoving");
 
-        public bool IsMoving => _agent != null && _agent.velocity.magnitude > 0.1f;
+        private bool IsMoving => _agent != null && _agent.velocity.magnitude > 0.1f;
+
+        private void ResetStuckDetection()
+        {
+            _lastProgressPosition = transform.position;
+            _stuckTimer = 0f;
+            _isCheckingStuck = true;
+        }
+
+        private void CheckIfStuck()
+        {
+            if (!_isCheckingStuck || !_hasPendingDestination || !_agent.hasPath)
+                return;
+
+            // Check if we're getting closer to the destination
+            float currentDistanceToTarget = Vector3.Distance(transform.position, _targetDestination);
+            float previousDistanceToTarget = Vector3.Distance(_lastProgressPosition, _targetDestination);
+            bool makingProgressToDestination =
+                currentDistanceToTarget < previousDistanceToTarget - stuckDetectionDistance;
+
+            // Also check if we've moved significantly from our last position
+            float distanceMoved = Vector3.Distance(transform.position, _lastProgressPosition);
+            bool movedSignificantly = distanceMoved > stuckDetectionDistance * 2;
+
+            if (makingProgressToDestination || movedSignificantly)
+            {
+                // Making progress, reset timer
+                _lastProgressPosition = transform.position;
+                _stuckTimer = 0f;
+            }
+            else
+            {
+                // Not making progress, increment timer
+                _stuckTimer += Time.deltaTime;
+
+                // If stuck for too long, abort navigation
+                if (_stuckTimer >= stuckDetectionTime)
+                {
+                    Debug.Log("Navigation aborted - agent appears stuck or unable to reach destination.");
+                    StopMoving();
+                }
+            }
+        }
 
         private void Start()
         {
@@ -38,17 +91,17 @@ namespace Player
             _agent.stoppingDistance = stoppingDistance;
             _agent.autoBraking = true;
 
-            // Create selection marker
-            if (selectionMarkerPrefab != null)
+            if (targetMarkerPrefab != null)
             {
-                _selectionMarker = Instantiate(selectionMarkerPrefab);
-                _selectionMarker.SetActive(false);
+                _targetMarker = Instantiate(targetMarkerPrefab);
+                _targetMarker.SetActive(false);
             }
         }
 
         private void Update()
         {
             UpdateMovement();
+            CheckIfStuck();
 
             // Debug path visualization
             if (debugPath && _agent.hasPath)
@@ -73,13 +126,8 @@ namespace Player
             {
                 _agent.SetDestination(navHit.position);
                 _agent.isStopped = false;
-
-                // Show selection marker
-                if (_selectionMarker != null)
-                {
-                    _selectionMarker.transform.position = navHit.position;
-                    _selectionMarker.SetActive(true);
-                }
+                ShowTargetMarkerAtPosition(navHit.position);
+                ResetStuckDetection(); // Add this line
             }
             else
             {
@@ -88,11 +136,13 @@ namespace Player
             }
         }
 
+
         public void StopMoving()
         {
             _agent.isStopped = true;
             _agent.ResetPath();
             _hasPendingDestination = false;
+            _isCheckingStuck = false;
 
             if (_animator != null)
             {
@@ -100,16 +150,9 @@ namespace Player
                 _animator.SetFloat(_moveSpeedParam, 0);
             }
 
-            HideSelectionMarker();
+            HideTargetMarker();
         }
 
-        public void HideSelectionMarker()
-        {
-            if (_selectionMarker != null)
-            {
-                _selectionMarker.SetActive(false);
-            }
-        }
 
         public IEnumerator MoveToInteractable(Vector3 targetPos, float interactionRange, System.Action onReachedTarget)
         {
@@ -144,7 +187,7 @@ namespace Player
                 yield return null;
             }
 
-            HideSelectionMarker();
+            HideTargetMarker();
 
             // Look at the interactable
             Vector3 lookDirection = targetPos - transform.position;
@@ -186,18 +229,35 @@ namespace Player
                     if (Vector3.Distance(transform.position, _targetDestination) <= _agent.stoppingDistance + 0.01f)
                     {
                         _hasPendingDestination = false;
-                        HideSelectionMarker();
+                        HideTargetMarker();
 
                         // Notify the turn manager
                         TurnManager.Instance?.EndPlayerTurn();
                     }
-                    // If path is complete but we're not at the destination, something prevented us from reaching it
+                    // If path is complete, but we're not at the destination, something prevented us from reaching it
                     else if (!_agent.pathPending)
                     {
                         _hasPendingDestination = false;
-                        HideSelectionMarker();
+                        HideTargetMarker();
                     }
                 }
+            }
+        }
+
+        private void ShowTargetMarkerAtPosition(Vector3 position)
+        {
+            if (_targetMarker != null)
+            {
+                _targetMarker.transform.position = position;
+                _targetMarker.SetActive(true);
+            }
+        }
+
+        private void HideTargetMarker()
+        {
+            if (_targetMarker != null)
+            {
+                _targetMarker.SetActive(false);
             }
         }
     }
