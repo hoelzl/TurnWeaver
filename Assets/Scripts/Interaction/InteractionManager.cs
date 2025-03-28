@@ -14,7 +14,7 @@ namespace Interaction
             _interactionSourceComponent = interactionSource.GetComponent<IInteractionSource>();
         }
 
-        public void ShowInteractionOptions(IInteractable interactable, Vector3 worldPosition)
+        public void ShowInteractionOptions(IInteractable interactable)
         {
             InteractionOptionSO[] options = interactable.InteractionOptions;
             if (_interactionSourceComponent == null)

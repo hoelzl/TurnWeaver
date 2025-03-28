@@ -142,23 +142,17 @@ public class PlayerController : MonoBehaviour, IInteractionSource
     private void HandleInteractableHit(RaycastHit hit)
     {
         // Get interactable component
-        IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+        var interactable = hit.collider.GetComponent<IInteractable>();
         if (interactable == null) return;
 
         // Always register with the interaction manager
         _interactionManager?.SetInteractionSource(this.gameObject);
-
         float distanceToTarget = Vector3.Distance(transform.position, hit.point);
 
         // If already within range, interact immediately
         if (distanceToTarget <= interactionRange)
         {
-            _isInteractionBlocked = true;
-
-            _interactionManager?.ShowInteractionOptions(interactable, hit.point);
-            // NOTE: InteractionManager will call our FinalizeInteraction when done
-            _isInteractionBlocked = false;
-
+            ShowInteractionOptions(interactable);
         }
         else
         {
@@ -185,6 +179,14 @@ public class PlayerController : MonoBehaviour, IInteractionSource
             // Start coroutine to wait until in range
             StartCoroutine(MoveToInteractable(interactable, targetPos));
         }
+    }
+
+    private void ShowInteractionOptions(IInteractable interactable)
+    {
+        _isInteractionBlocked = true;
+        _interactionManager?.ShowInteractionOptions(interactable);
+        // NOTE: InteractionManager will call our FinalizeInteraction when done
+        _isInteractionBlocked = false;
     }
 
     private void HandleGroundHit(RaycastHit hit)
@@ -215,9 +217,7 @@ public class PlayerController : MonoBehaviour, IInteractionSource
     private void UpdateMovement()
     {
         // Check if we're still moving
-        bool isMoving = _agent.velocity.magnitude > 0.1f;
-
-        if (isMoving)
+        if (IsMoving)
         {
             float speed = _agent.velocity.magnitude / moveSpeed;
             if (_animator != null)
@@ -251,36 +251,58 @@ public class PlayerController : MonoBehaviour, IInteractionSource
 
     private IEnumerator MoveToInteractable(IInteractable interactable, Vector3 targetPos)
     {
-        // Keep checking if we're close enough while path is still active
-        while (_agent.pathPending ||
-               (_agent.hasPath && _agent.remainingDistance > interactionRange))
+        // First, wait one frame to ensure NavMeshAgent has started processing the path
+        yield return null;
+
+        // Wait until either:
+        // 1. We're close enough to the target
+        // 2. The agent stopped moving (path completed or canceled)
+        // 3. A new destination was set
+        while (true)
         {
             // Check if a new destination was set during this coroutine
             if (_hasPendingDestination && _targetDestination != _agent.destination)
             {
-                yield break; // Exit the coroutine if a new destination was set
+                yield break; // Exit if player clicked elsewhere
+            }
+
+            // Check if we've reached the interaction range
+            float currentDistance = Vector3.Distance(transform.position, targetPos);
+            if (currentDistance <= interactionRange)
+            {
+                break; // Exit the loop if we're in range
+            }
+
+            // Check if we've stopped moving but didn't reach the target
+            if (!_agent.pathPending && !_agent.hasPath && _agent.velocity.sqrMagnitude < 0.1f)
+            {
+                yield break; // Exit if we can't reach the target
             }
 
             yield return null;
         }
 
-        // Hide the selection marker
+        HideSelectionMarker();
+
+        // Look at the interactable
+        Vector3 lookDirection = targetPos - transform.position;
+        lookDirection.y = 0;
+        if (lookDirection.sqrMagnitude > 0.001f) // Prevent errors with zero vectors
+        {
+            transform.rotation = Quaternion.LookRotation(lookDirection);
+        }
+
+        // Now that we're in range and facing the target, show the interaction menu
+        ShowInteractionOptions(interactable);
+    }
+
+
+
+    private void HideSelectionMarker()
+    {
         if (_selectionMarker != null)
         {
             _selectionMarker.SetActive(false);
-        }
-
-        // Check if we're actually within range
-        if (Vector3.Distance(transform.position, targetPos) <= interactionRange)
-        {
-            // Look at the interactable
-            Vector3 lookDirection = targetPos - transform.position;
-            lookDirection.y = 0;
-            transform.rotation = Quaternion.LookRotation(lookDirection);
-
-            // Now we can interact
-            _isInteractionBlocked = true;
-            _interactionManager?.ShowInteractionOptions(interactable, targetPos);
         }
     }
 
@@ -313,5 +335,5 @@ public class PlayerController : MonoBehaviour, IInteractionSource
     {
     }
 
-    public bool IsMoving() => _agent.velocity.magnitude > 0.1f;
+    public bool IsMoving => _agent.velocity.magnitude > 0.1f;
 }
