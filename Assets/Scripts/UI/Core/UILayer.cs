@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI.Core
@@ -10,6 +11,7 @@ namespace UI.Core
 
         public string LayerId => layerId;
         protected VisualElement Root => uiDocument?.rootVisualElement;
+        private readonly Stack<int> _stackPositions = new();
 
         protected virtual void Awake()
         {
@@ -61,11 +63,23 @@ namespace UI.Core
         // Called when this layer is pushed onto the stack
         public virtual void OnLayerPushed()
         {
+            int newStackPosition = UILayerManager.ActiveLayerCount;
+            _stackPositions.Push(newStackPosition);
+            uiDocument.sortingOrder = newStackPosition;
+            Show();
         }
 
         // Called when this layer is popped from the stack
         public virtual void OnLayerPopped()
         {
+            if (_stackPositions.TryPop(out int newStackPosition))
+            {
+                uiDocument.sortingOrder = newStackPosition;
+            }
+            else
+            {
+                Hide();
+            }
         }
 
         // Called when another layer is pushed on top

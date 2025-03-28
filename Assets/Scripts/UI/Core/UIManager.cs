@@ -1,47 +1,40 @@
-﻿using System;
-using Interaction;
-using Interaction.Objects;
+﻿using Interaction;
 using UI.Layers;
 using UnityEngine;
-using UI.Services;
 
 namespace UI.Core
 {
-    public class UIManager
+    public static class UIManager
     {
-        private static UIManager _instance;
-        public static UIManager Instance => _instance ??= new UIManager();
+        public static string InteractionMenuLayerName => "InteractionMenu";
 
-        public void ShowInteractionMenu(InteractionOptionSO[] options,
-            Action<InteractionOptionSO> onOptionSelected,
-            Action onCancelled)
+        public static void ShowInteractionMenu(
+            InteractionOptionSO[] options,
+            System.Action<InteractionOptionSO> onOptionSelected,
+            System.Action onCancelled)
         {
-            InteractionUIService.Instance.ShowInteractionOptions(
-                options, onOptionSelected, onCancelled);
+            var interactionMenuLayer = UILayerManager.Instance.GetLayer(InteractionMenuLayerName) as InteractionMenuLayer;
+            if (interactionMenuLayer == null)
+            {
+                Debug.LogError("InteractionMenuLayer not found!");
+                return;
+            }
+            interactionMenuLayer.SetInteractionOptions(options, onOptionSelected, onCancelled);
+            UILayerManager.Instance.PushLayer(InteractionMenuLayerName);
         }
 
-        public void CloseInteractionMenu()
-        {
-            InteractionUIService.Instance.CloseInteractionMenu();
-        }
+        public static string DescriptionLayerName => "Description";
 
-        public void ShowDescription(string description)
+        public static void ShowDescription(string description)
         {
-            var descriptionLayer = UILayerManager.Instance.GetLayer("Description") as DescriptionLayer;
+            var descriptionLayer = UILayerManager.Instance.GetLayer(DescriptionLayerName) as DescriptionLayer;
             if (descriptionLayer == null)
             {
                 Debug.LogError("Description layer not found!");
                 return;
             }
             descriptionLayer.SetDescription(description);
-            UILayerManager.Instance.PushLayer("Description");
-        }
-
-        public void CloseDescription()
-        {
-            if (!UILayerManager.HasTopLayer("Description")) return;
-            Debug.LogWarning("Description did not close its menu.");
-            UILayerManager.Instance.PopLayer();
+            UILayerManager.Instance.PushLayer(DescriptionLayerName);
         }
     }
 }

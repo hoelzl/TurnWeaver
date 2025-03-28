@@ -50,7 +50,6 @@ namespace UI.Core
 
             _layerStack.Push(layer);
             layer.OnLayerPushed();
-            layer.Show();
         }
 
         public void PopLayer()
@@ -58,7 +57,6 @@ namespace UI.Core
             if (_layerStack.Count == 0) return;
 
             UILayer topLayer = _layerStack.Pop();
-            topLayer.Hide();
             topLayer.OnLayerPopped();
 
             if (_layerStack.Count > 0)

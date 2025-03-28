@@ -19,7 +19,7 @@ namespace Interaction.Objects
         public override void Invoke(GameObject source)
         {
             Debug.Log("Examine: " + _objectDescription?.ToString() ?? "null");
-            UIManager.Instance.ShowDescription(_objectDescription);
+            UIManager.ShowDescription(_objectDescription);
         }
     }
 }

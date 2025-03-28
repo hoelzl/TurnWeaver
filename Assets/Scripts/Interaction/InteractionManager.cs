@@ -1,7 +1,5 @@
-﻿using UI;
-using UI.Core;
+﻿using UI.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Interaction
 {
@@ -41,7 +39,7 @@ namespace Interaction
                     break;
                 }
                 default:
-                    UIManager.Instance.ShowInteractionMenu(options,
+                    UIManager.ShowInteractionMenu(options,
                         (optionSO) => { InteractWithOption(interactable, optionSO); },
                         () => CancelInteraction(interactable));
                     break;
