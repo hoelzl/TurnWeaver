@@ -24,7 +24,7 @@ namespace Player
 
         private void OnEnable()
         {
-            _clickAction = _inputActions.Gameplay.Click;
+             _clickAction = _inputActions.Gameplay.Click;
             _pointAction = _inputActions.Gameplay.Point;
 
             _clickAction.performed += HandleClick;
