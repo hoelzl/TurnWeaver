@@ -29,8 +29,6 @@ namespace UI.Core
                 Debug.LogError($"UILayer {layerName} is missing a UIDocument component!");
                 return;
             }
-
-            SetupUI();
         }
 
         // Initialize the layer after being instantiated
