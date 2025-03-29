@@ -6,13 +6,26 @@ using UnityEngine;
 
 namespace Inventory
 {
+    [Serializable]
+    public class InitialItemEntry
+    {
+        public ItemSO item;
+        public int quantity = 1;
+    }
+
     public class RPGInventory : MonoBehaviour
     {
+        [Header("Inventory")]
         [SerializeField] private float maxWeight = 100f;
         [SerializeField] private int maxSlots = 30;
-        [SerializeField] private int currency = 0;
+        [SerializeField] private int currency;
 
-        private List<ItemStack> items = new List<ItemStack>();
+        [Header("Initial Inventory Configuration")]
+        [SerializeField] private List<InitialItemEntry> initialItems = new();
+        [SerializeField] private int initialCurrency;
+        [SerializeField] private bool loadItemsOnStart = true;
+
+        private readonly List<ItemStack> _items = new List<ItemStack>();
 
         public float CurrentWeight { get; private set; }
         public int Currency => currency;
@@ -22,8 +35,39 @@ namespace Inventory
         // Events
         public event Action OnInventoryChanged;
 
-        public IReadOnlyList<ItemStack> Items => items.AsReadOnly();
+        public IReadOnlyList<ItemStack> Items => _items.AsReadOnly();
 
+        private void Start()
+        {
+            if (loadItemsOnStart)
+            {
+                LoadInitialItems();
+            }
+        }
+
+        public void LoadInitialItems()
+        {
+            // Clear existing items if needed
+            if (_items is {Count: > 0})
+            {
+                _items.Clear();
+            }
+
+            // Set initial currency
+            currency = initialCurrency;
+
+            // Add all initial items
+            foreach (InitialItemEntry entry in initialItems)
+            {
+                if (entry.item != null && entry.quantity > 0)
+                {
+                    AddItem(entry.item, entry.quantity);
+                }
+            }
+
+            // Notify of changes
+            OnInventoryChanged?.Invoke();
+        }
         private void Awake()
         {
             CalculateWeight();
@@ -44,17 +88,17 @@ namespace Inventory
                 int remainingToAdd = quantity;
 
                 // Try to add to existing stacks first
-                foreach (var stack in items.Where(s => s.Item == item && s.CanAddToStack(1)))
+                foreach (var stack in _items.Where(s => s.Item == item && s.CanAddToStack(1)))
                 {
                     remainingToAdd = stack.AddToStack(remainingToAdd);
                     if (remainingToAdd <= 0) break;
                 }
 
                 // If we still have items to add, create new stacks
-                while (remainingToAdd > 0 && items.Count < maxSlots)
+                while (remainingToAdd > 0 && _items.Count < maxSlots)
                 {
                     int stackSize = Mathf.Min(remainingToAdd, item.MaxStackSize);
-                    items.Add(new ItemStack(item, stackSize));
+                    _items.Add(new ItemStack(item, stackSize));
                     remainingToAdd -= stackSize;
                 }
 
@@ -64,12 +108,12 @@ namespace Inventory
             else
             {
                 // For non-stackable items, each item needs its own slot
-                if (items.Count + quantity > maxSlots)
+                if (_items.Count + quantity > maxSlots)
                     return false;
 
                 for (int i = 0; i < quantity; i++)
                 {
-                    items.Add(new ItemStack(item, 1));
+                    _items.Add(new ItemStack(item));
                 }
             }
 
@@ -87,9 +131,9 @@ namespace Inventory
             List<ItemStack> stacksToRemove = new List<ItemStack>();
 
             // Process in reverse order to handle removal properly
-            for (int i = items.Count - 1; i >= 0; i--)
+            for (int i = _items.Count - 1; i >= 0; i--)
             {
-                var stack = items[i];
+                var stack = _items[i];
                 if (stack.Item != item) continue;
 
                 if (stack.Quantity <= remainingToRemove)
@@ -111,7 +155,7 @@ namespace Inventory
             // Actually remove the marked stacks
             foreach (var stack in stacksToRemove)
             {
-                items.Remove(stack);
+                _items.Remove(stack);
             }
 
             // If we couldn't remove all requested items, return false
@@ -125,10 +169,10 @@ namespace Inventory
         // Move an item to another inventory
         public bool MoveItemTo(RPGInventory targetInventory, int sourceIndex, int quantity = 1)
         {
-            if (targetInventory == null || sourceIndex < 0 || sourceIndex >= items.Count || quantity <= 0)
+            if (targetInventory == null || sourceIndex < 0 || sourceIndex >= _items.Count || quantity <= 0)
                 return false;
 
-            var sourceStack = items[sourceIndex];
+            var sourceStack = _items[sourceIndex];
             if (sourceStack.Quantity < quantity)
                 quantity = sourceStack.Quantity;
 
@@ -139,7 +183,7 @@ namespace Inventory
             // Remove from source inventory
             sourceStack.RemoveFromStack(quantity);
             if (sourceStack.Quantity <= 0)
-                items.RemoveAt(sourceIndex);
+                _items.RemoveAt(sourceIndex);
 
             // Add to target inventory
             targetInventory.AddItem(sourceStack.Item, quantity);
@@ -164,7 +208,7 @@ namespace Inventory
                 int remainingToAdd = quantity;
 
                 // Calculate how many we can add to existing stacks
-                foreach (var stack in items.Where(s => s.Item == item))
+                foreach (var stack in _items.Where(s => s.Item == item))
                 {
                     int canAddToStack = stack.Item.MaxStackSize - stack.Quantity;
                     remainingToAdd -= Mathf.Min(remainingToAdd, canAddToStack);
@@ -173,22 +217,22 @@ namespace Inventory
 
                 // Calculate how many new stacks we'd need
                 int newStacksNeeded = Mathf.CeilToInt((float)remainingToAdd / item.MaxStackSize);
-                return items.Count + newStacksNeeded <= maxSlots;
+                return _items.Count + newStacksNeeded <= maxSlots;
             }
             else
             {
                 // For non-stackable items, each item needs its own slot
-                return items.Count + quantity <= maxSlots;
+                return _items.Count + quantity <= maxSlots;
             }
         }
 
         // Use an item at the given index
         public bool UseItem(int index, GameObject user)
         {
-            if (index < 0 || index >= items.Count)
+            if (index < 0 || index >= _items.Count)
                 return false;
 
-            var stack = items[index];
+            var stack = _items[index];
             if (!stack.Item.CanUse(user))
                 return false;
 
@@ -199,7 +243,7 @@ namespace Inventory
             {
                 stack.RemoveFromStack(1);
                 if (stack.Quantity <= 0)
-                    items.RemoveAt(index);
+                    _items.RemoveAt(index);
 
                 CalculateWeight();
                 OnInventoryChanged?.Invoke();
@@ -231,27 +275,27 @@ namespace Inventory
         // Calculate the total weight of the inventory
         private void CalculateWeight()
         {
-            CurrentWeight = items.Sum(stack => stack.TotalWeight);
+            CurrentWeight = _items.Sum(stack => stack.TotalWeight);
         }
 
         // Split a stack at the given index
         public bool SplitStack(int index, int amount)
         {
-            if (index < 0 || index >= items.Count || amount <= 0)
+            if (index < 0 || index >= _items.Count || amount <= 0)
                 return false;
 
-            var sourceStack = items[index];
+            var sourceStack = _items[index];
             if (sourceStack.Quantity <= amount || !sourceStack.Item.IsStackable)
                 return false;
 
             // Check if we have a free slot
-            if (items.Count >= maxSlots)
+            if (_items.Count >= maxSlots)
                 return false;
 
             var newStack = sourceStack.SplitStack(amount);
             if (newStack != null)
             {
-                items.Add(newStack);
+                _items.Add(newStack);
                 OnInventoryChanged?.Invoke();
                 return true;
             }
@@ -262,13 +306,13 @@ namespace Inventory
         // Combine two stacks
         public bool CombineStacks(int sourceIndex, int targetIndex)
         {
-            if (sourceIndex < 0 || sourceIndex >= items.Count ||
-                targetIndex < 0 || targetIndex >= items.Count ||
+            if (sourceIndex < 0 || sourceIndex >= _items.Count ||
+                targetIndex < 0 || targetIndex >= _items.Count ||
                 sourceIndex == targetIndex)
                 return false;
 
-            var sourceStack = items[sourceIndex];
-            var targetStack = items[targetIndex];
+            var sourceStack = _items[sourceIndex];
+            var targetStack = _items[targetIndex];
 
             if (sourceStack.Item != targetStack.Item || !sourceStack.Item.IsStackable)
                 return false;
@@ -280,7 +324,7 @@ namespace Inventory
             targetStack.AddToStack(amountToMove);
 
             if (sourceStack.Quantity <= 0)
-                items.RemoveAt(sourceIndex);
+                _items.RemoveAt(sourceIndex);
 
             OnInventoryChanged?.Invoke();
             return true;
@@ -289,7 +333,7 @@ namespace Inventory
         // Clear the inventory
         public void Clear()
         {
-            items.Clear();
+            _items.Clear();
             CalculateWeight();
             OnInventoryChanged?.Invoke();
         }

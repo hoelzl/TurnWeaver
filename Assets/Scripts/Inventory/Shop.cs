@@ -6,14 +6,25 @@ namespace Inventory
 {
     public class Shop : MonoBehaviour, Interaction.IInteractable
     {
+        [Header("Shop")]
         [SerializeField] private string shopName = "Shop";
         [SerializeField] private RPGInventory shopInventory;
-        [SerializeField] private float buyMarkup = 1.5f; // Price multiplier when buying
-        [SerializeField] private float sellDiscount = 0.5f; // Price multiplier when selling
+        [SerializeField, Range(1.0f, 5.0f)] private float buyMarkup = 1.5f;
+        [SerializeField, Range(0.1f, 1.0f)] private float sellDiscount = 0.5f;
 
         [Header("Interaction")]
         [SerializeField] private Interaction.InteractionOptionSO[] interactionOptions;
         [SerializeField] private bool autoInvokeSingleOption = true;
+
+        [Header("Shop Inventory Configuration")]
+        [SerializeField] private InventoryPresetSO shopInventoryPreset;
+        [SerializeField] private bool refreshInventoryOnTimeInterval;
+        [SerializeField] private float inventoryRefreshInterval = 24.0f; // In-game hours
+        [SerializeField] private float lastRefreshTime = 0f;
+
+        // Stock limits
+        [SerializeField] private bool limitStockQuantities;
+        [SerializeField] private int maxStockPerItem = 10;
 
         // IInteractable implementation
         public Interaction.InteractionOptionSO[] InteractionOptions => interactionOptions;
@@ -21,6 +32,8 @@ namespace Inventory
 
         // Events
         public event Action OnShopInteractionComplete;
+
+        public InventoryPresetSO ShopInventoryPreset => shopInventoryPreset;
 
         public string ShopName => shopName;
 
@@ -31,6 +44,54 @@ namespace Inventory
 
             if (shopInventory == null)
                 shopInventory = gameObject.AddComponent<RPGInventory>();
+        }
+
+        private void Start()
+        {
+            // Initialize shop inventory
+            if (shopInventoryPreset != null)
+            {
+                shopInventoryPreset.ApplyToInventory(shopInventory);
+            }
+        }
+
+        // Method to refresh the shop inventory using its preset
+        public void RefreshInventory()
+        {
+            if (shopInventoryPreset != null)
+            {
+                // Preserve currency when refreshing
+                int currentCurrency = shopInventory.Currency;
+
+                // Apply preset
+                shopInventoryPreset.ApplyToInventory(shopInventory);
+
+                // Restore currency
+                shopInventory.SetCurrency(currentCurrency);
+
+                lastRefreshTime = Time.time;
+
+                // Apply stock limits if enabled
+                if (limitStockQuantities)
+                {
+                    ApplyStockLimits();
+                }
+            }
+        }
+
+        private void ApplyStockLimits()
+        {
+            var items = shopInventory.Items;
+            for (int i = 0; i < items.Count; i++)
+            {
+                var itemStack = items[i];
+                if (itemStack.Quantity > maxStockPerItem)
+                {
+                    // This is a bit of a hack - we're relying on knowing the implementation
+                    // Ideally, the Inventory class would have a SetItemQuantity method
+                    shopInventory.RemoveItem(itemStack.Item, itemStack.Quantity - maxStockPerItem);
+                }
+            }
         }
 
         // Calculate buy price for an item (what player pays)
