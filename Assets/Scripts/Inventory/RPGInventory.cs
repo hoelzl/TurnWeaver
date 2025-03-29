@@ -173,20 +173,30 @@ namespace Inventory
                 return false;
 
             var sourceStack = _items[sourceIndex];
+            Debug.Log($"Attempting to move {quantity} of {sourceStack.Item.ItemName}");
+
+            // Make sure we don't transfer more than we have
             if (sourceStack.Quantity < quantity)
+            {
+                Debug.LogWarning($"Tried to move {quantity} but only {sourceStack.Quantity} available. Adjusting.");
                 quantity = sourceStack.Quantity;
+            }
 
             // Check if target inventory can accept the item
             if (!targetInventory.CanAddItem(sourceStack.Item, quantity))
                 return false;
 
             // Remove from source inventory
+            Debug.Log($"Before transfer: Source has {sourceStack.Quantity}");
             sourceStack.RemoveFromStack(quantity);
+            Debug.Log($"After removal: Source has {sourceStack.Quantity}");
+
             if (sourceStack.Quantity <= 0)
                 _items.RemoveAt(sourceIndex);
 
             // Add to target inventory
             targetInventory.AddItem(sourceStack.Item, quantity);
+            Debug.Log($"Added {quantity} to target inventory");
 
             CalculateWeight();
             OnInventoryChanged?.Invoke();

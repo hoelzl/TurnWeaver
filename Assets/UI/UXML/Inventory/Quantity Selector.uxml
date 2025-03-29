@@ -1,20 +1,16 @@
-﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="quantity-selector-root"
-                      style="flex-grow: 0; position: absolute; width: 300px; height: auto; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: auto; align-self: center;">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="quantity-selector-root" style="flex-grow: 0; position: absolute; width: 300px; height: auto; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: auto; align-self: center;">
         <ui:VisualElement name="header" style="background-color: rgb(88, 88, 88); padding: 10px;">
-            <ui:Label text="Select Quantity" name="title-label" style="font-size: 16px; -unity-font-style: bold;"/>
+            <ui:Label text="Select Quantity" name="title-label" style="font-size: 16px; -unity-font-style: bold;" />
         </ui:VisualElement>
         <ui:VisualElement name="content" style="padding: 15px;">
-            <ui:VisualElement name="quantity-container"
-                              style="flex-direction: row; align-items: center; margin-bottom: 15px;">
-                <ui:Slider picking-mode="Ignore" name="quantity-slider" low-value="1" high-value="99"
-                           style="flex-grow: 1; margin-right: 10px;"/>
-                <ui:Label text="1" name="quantity-label"
-                          style="min-width: 30px; background-color: rgb(50, 50, 50); padding: 5px; -unity-text-align: middle-center;"/>
+            <ui:VisualElement name="quantity-container" style="flex-direction: row; align-items: center; margin-bottom: 15px;">
+                <ui:Slider picking-mode="Ignore" name="quantity-slider" low-value="1" high-value="99" style="flex-grow: 1; margin-right: 10px;" />
+                <ui:Label text="1" name="quantity-label" style="min-width: 30px; background-color: rgb(50, 50, 50); padding: 5px; -unity-text-align: middle-center; color: rgb(239, 239, 239);" />
             </ui:VisualElement>
             <ui:VisualElement name="button-container" style="flex-direction: row; justify-content: space-between;">
-                <ui:Button text="Cancel" name="cancel-button" style="flex-grow: 1; margin-right: 5px;"/>
-                <ui:Button text="Confirm" name="confirm-button" style="flex-grow: 1; margin-left: 5px;"/>
+                <ui:Button text="Cancel" name="cancel-button" style="flex-grow: 1; margin-right: 5px;" />
+                <ui:Button text="Confirm" name="confirm-button" style="flex-grow: 1; margin-left: 5px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -982,6 +982,8 @@ MonoBehaviour:
     prefab: {fileID: 822528966199281969, guid: def6bf30491e2154a94a8f4e5342228a, type: 3}
   - layerId: Inventory
     prefab: {fileID: 8881846053151256998, guid: dfe29ca3b52bddf43bbf772b6edc18db, type: 3}
+  - layerId: QuantitySelector
+    prefab: {fileID: 1489163473695990573, guid: 80e41e203fd79ee41b3d8697d05ca8ed, type: 3}
   - layerId: Shop
     prefab: {fileID: 2528368479016429856, guid: 27a3accf8b567e64fab1fb2761402601, type: 3}
   - layerId: TransferItems
@@ -1344,42 +1346,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 501650213}
     m_Modifications:
-    - target: {fileID: 674132363359163981, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: shopInventoryPreset
-      value: 
-      objectReference: {fileID: 11400000, guid: 842933804b42b25449c83589fd13c25f, type: 2}
-    - target: {fileID: 674132363359163981, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: refreshInventoryOnTimeInterval
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1925052963150030100, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: initialItems.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1925052963150030100, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: initialItems.Array.data[0].item
-      value: 
-      objectReference: {fileID: 11400000, guid: 8c9fd39dca930d14b8fb124991404187, type: 2}
-    - target: {fileID: 1925052963150030100, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: initialItems.Array.data[1].item
-      value: 
-      objectReference: {fileID: 11400000, guid: 7432e6c8f2447dd4ba90ecaffad66db6, type: 2}
-    - target: {fileID: 1925052963150030100, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: initialItems.Array.data[2].item
-      value: 
-      objectReference: {fileID: 11400000, guid: ce7c47f5c22856f43aa3162d3abe460a, type: 2}
-    - target: {fileID: 1925052963150030100, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: initialItems.Array.data[0].quantity
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1925052963150030100, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: initialItems.Array.data[1].quantity
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1925052963150030100, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
-      propertyPath: initialItems.Array.data[2].quantity
-      value: 99
-      objectReference: {fileID: 0}
     - target: {fileID: 8520023367432327712, guid: bf891bdc8e4ff2345955dcbb1b0b5806, type: 3}
       propertyPath: m_Name
       value: Vendor
@@ -1803,7 +1769,7 @@ MonoBehaviour:
   maxSlots: 30
   currency: 0
   initialItems: []
-  initialCurrency: 0
+  initialCurrency: 100
   loadItemsOnStart: 1
 --- !u!1001 &2264908030754465969
 PrefabInstance:
@@ -1813,46 +1779,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 501650213}
     m_Modifications:
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: currency
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialCurrency
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: loadItemsOnStart
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialItems.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialItems.Array.data[0].item
-      value: 
-      objectReference: {fileID: 11400000, guid: 7432e6c8f2447dd4ba90ecaffad66db6, type: 2}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialItems.Array.data[1].item
-      value: 
-      objectReference: {fileID: 11400000, guid: 7432e6c8f2447dd4ba90ecaffad66db6, type: 2}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialItems.Array.data[2].item
-      value: 
-      objectReference: {fileID: 11400000, guid: 7432e6c8f2447dd4ba90ecaffad66db6, type: 2}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialItems.Array.data[0].quantity
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialItems.Array.data[1].quantity
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2574548224102914193, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
-      propertyPath: initialItems.Array.data[2].quantity
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8520023367432327712, guid: 78b535d7082ebac4d802a3cdb5f652e6, type: 3}
       propertyPath: m_Name
       value: NPC
@@ -1967,7 +1893,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 481040741827451071}
+  - {fileID: 501650213}
   - {fileID: 2050917827}
   - {fileID: 772950010}
   - {fileID: 65954820}
-  - {fileID: 501650213}

@@ -127,6 +127,9 @@ MonoBehaviour:
   maxWeight: 100
   maxSlots: 30
   currency: 0
+  initialItems: []
+  initialCurrency: 200
+  loadItemsOnStart: 1
 --- !u!114 &674132363359163981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopName: Shop (Blue)
+  headerFormat: Trading with {0}
   shopInventory: {fileID: 1925052963150030100}
   buyMarkup: 1.5
   sellDiscount: 0.5
@@ -147,3 +151,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2fbe67eddf7439c4d8820a056634ed36, type: 2}
   - {fileID: 11400000, guid: c385cb81d51309a44b5e4115be1acf23, type: 2}
   autoInvokeSingleOption: 0
+  shopInventoryPreset: {fileID: 11400000, guid: 842933804b42b25449c83589fd13c25f, type: 2}
+  refreshInventoryOnTimeInterval: 0
+  inventoryRefreshInterval: 24
+  lastRefreshTime: 0
+  limitStockQuantities: 0
+  maxStockPerItem: 10

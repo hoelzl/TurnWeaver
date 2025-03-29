@@ -100,6 +100,13 @@ namespace UI.Layers.Inventory
                 _sourceWeightLabel.text = $"Weight: {_sourceInventory.CurrentWeight:F1}/{_sourceInventory.MaxWeight:F1}";
             }
 
+            // Before clearing, remove event handlers from existing buttons
+            foreach (VisualElement slot in _sourceSlots)
+            {
+                var slotButton = slot.Q<Button>("item-slot");
+                slotButton?.ClearBindings();
+            }
+
             // Clear existing items
             _sourceGrid.Clear();
             _sourceSlots.Clear();

@@ -74,6 +74,7 @@ namespace UI.Layers.Inventory
         private void OnSliderValueChanged(ChangeEvent<float> evt)
         {
             _currentQuantity = Mathf.RoundToInt(evt.newValue);
+            _quantitySlider.SetValueWithoutNotify(_currentQuantity);
             UpdateQuantityLabel();
         }
 
@@ -87,15 +88,19 @@ namespace UI.Layers.Inventory
 
         private void OnConfirmClicked()
         {
-            var callback = _onConfirm;
-            int quantity = _currentQuantity;
-
+            Debug.Log("QuantitySelector: Confirm clicked");
             UILayerManager.Instance.PopLayer();
-            callback?.Invoke(quantity);
+            if (_onConfirm != null)
+            {
+                Debug.Log($"QuantitySelector: Invoking callback with quantity {_currentQuantity}");
+                _onConfirm.Invoke(_currentQuantity);
+            }
         }
+
 
         private void OnCancelClicked()
         {
+            Debug.Log("QuantitySelector: Cancel clicked");
             UILayerManager.Instance.PopLayer();
         }
 

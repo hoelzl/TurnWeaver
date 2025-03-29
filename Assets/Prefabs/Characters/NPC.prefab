@@ -143,4 +143,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxWeight: 100
   maxSlots: 30
-  currency: 0
+  currency: 200
+  initialItems:
+  - item: {fileID: 11400000, guid: b4c07f4a5039e5c45ae13fe3633cc148, type: 2}
+    quantity: 10
+  - item: {fileID: 11400000, guid: ce7c47f5c22856f43aa3162d3abe460a, type: 2}
+    quantity: 5
+  - item: {fileID: 11400000, guid: 7432e6c8f2447dd4ba90ecaffad66db6, type: 2}
+    quantity: 3
+  initialCurrency: 200
+  loadItemsOnStart: 1

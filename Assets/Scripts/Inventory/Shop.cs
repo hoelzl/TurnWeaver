@@ -8,6 +8,7 @@ namespace Inventory
     {
         [Header("Shop")]
         [SerializeField] private string shopName = "Shop";
+        [SerializeField] private string headerFormat = "Trading with {0}";
         [SerializeField] private RPGInventory shopInventory;
         [SerializeField, Range(1.0f, 5.0f)] private float buyMarkup = 1.5f;
         [SerializeField, Range(0.1f, 1.0f)] private float sellDiscount = 0.5f;
@@ -36,6 +37,7 @@ namespace Inventory
         public InventoryPresetSO ShopInventoryPreset => shopInventoryPreset;
 
         public string ShopName => shopName;
+        public string HeaderFormat => headerFormat;
 
         private void Awake()
         {

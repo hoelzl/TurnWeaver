@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections;
 
 namespace UI.Core
 {
@@ -117,22 +118,46 @@ namespace UI.Core
             layer.OnLayerPushed();
         }
 
+// In UILayerManager.cs, modify PopLayer method
         public void PopLayer()
         {
             if (_layerStack.Count == 0) return;
 
-            UILayer topLayer = _layerStack.Pop();
+            // Get the layer we want to pop
+            UILayer topLayer = _layerStack.Peek();
+            string layerToPop = topLayer.LayerName;
+
+            // Pop the layer
+            _layerStack.Pop();
+
+            // Debug logging
+            Debug.Log($"Popping layer: {layerToPop}");
+
+            // Call layer event
             topLayer.OnLayerPopped();
 
-            // Destroy the layer instance
-            Destroy(topLayer.gameObject);
+            // Destroy the layer instance - MAINTAIN REFERENCE
+            GameObject layerObject = topLayer.gameObject;
+            // Wait until end of frame to destroy
+            StartCoroutine(DestroyLayerAtEndOfFrame(layerObject));
 
+            // Update the new top layer
             if (_layerStack.Count > 0)
             {
                 UILayer newTop = _layerStack.Peek();
                 newTop.OnLayerUncovered();
             }
         }
+
+        private IEnumerator DestroyLayerAtEndOfFrame(GameObject layerObject)
+        {
+            yield return new WaitForEndOfFrame();
+            if (layerObject != null)
+            {
+                Destroy(layerObject);
+            }
+        }
+
 
         public void PopAllLayers()
         {

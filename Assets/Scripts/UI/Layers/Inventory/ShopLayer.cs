@@ -14,6 +14,7 @@ namespace UI.Layers.Inventory
         private Shop _shop;
         private RPGInventory _playerInventory;
 
+        private Label _shopTitleLabel;
         private Label _shopNameLabel;
         private Label _shopGoldLabel;
         private VisualElement _shopGrid;
@@ -36,7 +37,6 @@ namespace UI.Layers.Inventory
 
             // Subscribe to new events
             SubscribeToEvents();
-
             RefreshDisplay();
         }
 
@@ -47,6 +47,7 @@ namespace UI.Layers.Inventory
             if (Root == null) return;
 
             // Get references to UI elements
+            _shopTitleLabel = Root.Q<Label>("shop-title");
             _shopNameLabel = Root.Q<Label>("shop-name-label");
             _shopGoldLabel = Root.Q<Label>("shop-gold-label");
             _shopGrid = Root.Q<VisualElement>("shop-grid");
@@ -76,7 +77,11 @@ namespace UI.Layers.Inventory
             RPGInventory shopInventory = _shop.GetComponent<RPGInventory>();
             if (shopInventory == null) return;
 
-            // Update labels
+            if (_shopTitleLabel != null)
+            {
+                _shopTitleLabel.text = string.Format(_shop.HeaderFormat, _shop.ShopName);
+            }
+
             if (_shopNameLabel != null)
             {
                 _shopNameLabel.text = _shop.ShopName;
@@ -87,6 +92,12 @@ namespace UI.Layers.Inventory
                 _shopGoldLabel.text = $"Gold: {shopInventory.Currency}";
             }
 
+            // Before clearing, remove event handlers from existing buttons
+            foreach (VisualElement slot in _shopSlots)
+            {
+                var slotButton = slot.Q<Button>("item-slot");
+                slotButton?.ClearBindings();
+            }
             // Clear existing items
             _shopGrid.Clear();
             _shopSlots.Clear();

@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerName: Shop
   uiDocument: {fileID: 4914431473517093191}
-  itemSlotTemplate: {fileID: 9197481963319205126, guid: d10174fd26ba45f79774ba7842120b74, type: 3}
+  itemSlotTemplate: {fileID: 9197481963319205126, guid: b073e7d4812c44b2a3b3dc3227d11c17, type: 3}
 --- !u!114 &4914431473517093191
 MonoBehaviour:
   m_ObjectHideFlags: 0
