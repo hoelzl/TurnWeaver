@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="transfer-root" style="flex-grow: 0; position: absolute; width: 90%; height: 80%; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: auto; align-self: center; max-width: 1000px; max-height: 700px;">
+        <ui:VisualElement name="header" style="background-color: rgb(88, 88, 88); padding: 10px;">
+            <ui:Label text="Transfer Items" name="header-label" style="font-size: 20px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="content" style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement name="source-container" style="flex-grow: 1; margin: 5px; border-width: 1px; border-color: rgb(60, 60, 60);">
+                <ui:VisualElement name="source-header" style="background-color: rgb(88, 88, 88); padding: 5px;">
+                    <ui:Label text="Player" name="source-name-label" style="font-size: 16px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+                    <ui:Label text="Weight: 25.5/100.0" name="source-weight-label" style="font-size: 12px; color: rgb(239, 239, 239);" />
+                </ui:VisualElement>
+                <ui:ScrollView name="source-scroll-view" style="flex-grow: 1; padding: 5px;">
+                    <ui:VisualElement name="source-grid" style="flex-direction: row; flex-wrap: wrap; justify-content: flex-start;" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="target-container" style="flex-grow: 1; margin: 5px; border-width: 1px; border-color: rgb(60, 60, 60);">
+                <ui:VisualElement name="target-header" style="background-color: rgb(88, 88, 88); padding: 5px;">
+                    <ui:Label text="Container" name="target-name-label" style="font-size: 16px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+                    <ui:Label text="Weight: 15.0/200.0" name="target-weight-label" style="font-size: 12px; color: rgb(239, 239, 239);" />
+                </ui:VisualElement>
+                <ui:ScrollView name="target-scroll-view" style="flex-grow: 1; padding: 5px;">
+                    <ui:VisualElement name="target-grid" style="flex-direction: row; flex-wrap: wrap; justify-content: flex-start;" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="footer" style="background-color: rgb(88, 88, 88); padding: 10px; flex-direction: row; justify-content: flex-end;">
+            <ui:Button text="Close" name="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

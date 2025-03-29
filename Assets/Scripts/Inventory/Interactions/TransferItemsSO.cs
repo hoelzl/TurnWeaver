@@ -1,10 +1,11 @@
 ﻿using Interaction;
+using UI.Core;
 using UnityEngine;
 
 namespace Inventory.Interactions
 {
     [CreateAssetMenu(fileName = "New Transfer Items Option", menuName = "Interaction System/Transfer Items Option",
-        order = 3)]
+        order = 2)]
     public class TransferItemsOptionSO : InteractionOptionSO
     {
         public override IInteractionOption CreateInstance(IInteractable interactable)
@@ -15,12 +16,12 @@ namespace Inventory.Interactions
 
     public class TransferItemsOption : InteractionOptionBase
     {
-        private readonly Inventory _targetInventory;
+        private readonly RPGInventory _targetInventory;
 
         public TransferItemsOption(IInteractable interactable)
         {
             Interactable = interactable;
-            _targetInventory = (interactable as Component)?.GetComponent<Inventory>();
+            _targetInventory = (interactable as Component)?.GetComponent<RPGInventory>();
         }
 
         public override string Text => "Transfer Items";
@@ -36,16 +37,15 @@ namespace Inventory.Interactions
             }
 
             // Get player's inventory
-            var playerInventory = source.GetComponent<Inventory>();
+            var playerInventory = source.GetComponent<RPGInventory>();
             if (playerInventory == null)
             {
                 Debug.LogWarning("Player doesn't have an inventory component!");
                 return;
             }
 
-            // Show transfer UI - you'll implement this in UI layer
-            Debug.Log("Opening inventory transfer UI");
-            // UI.Core.UIManager.ShowInventoryTransfer(playerInventory, _targetInventory);
+            // Show transfer UI
+            UIManager.ShowInventoryTransfer(playerInventory, _targetInventory);
         }
     }
 }

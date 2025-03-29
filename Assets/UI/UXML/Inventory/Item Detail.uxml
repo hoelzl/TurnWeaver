@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="item-detail-root" style="flex-grow: 0; position: absolute; width: 400px; height: auto; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: auto; align-self: center;">
+        <ui:VisualElement name="header" style="background-color: rgb(88, 88, 88); padding: 10px;">
+            <ui:Label text="Item Details" name="detail-title" style="font-size: 18px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="content" style="padding: 10px;">
+            <ui:VisualElement name="item-header" style="flex-direction: row; margin-bottom: 10px;">
+                <ui:VisualElement name="item-icon" style="width: 64px; height: 64px; background-color: rgb(40, 40, 40); margin-right: 10px;" />
+                <ui:Label text="Iron Sword" name="item-name" style="font-size: 16px; -unity-font-style: bold; white-space: normal;" />
+            </ui:VisualElement>
+            <ui:Label text="A well-crafted iron sword with a sharp edge." name="item-description" style="white-space: normal; margin-bottom: 10px;" />
+            <ui:Label text="Weight: 3.5 | Value: 75\nSlot: MainHand | Damage: 8" name="item-stats" style="white-space: normal; background-color: rgb(88, 88, 88); padding: 5px; margin-bottom: 10px; color: rgb(239, 239, 239);" />
+            <ui:VisualElement name="action-buttons" style="flex-direction: row; justify-content: space-between; margin-top: 10px;">
+                <ui:Button text="Use" name="use-button" style="flex-grow: 1; margin-right: 5px;" />
+                <ui:Button text="Drop" name="drop-button" style="flex-grow: 1; margin-right: 5px;" />
+                <ui:Button text="Split" name="split-button" style="flex-grow: 1;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="footer" style="background-color: rgb(88, 88, 88); padding: 10px; flex-direction: row; justify-content: flex-end;">
+            <ui:Button text="Close" name="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

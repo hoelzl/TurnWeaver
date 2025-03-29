@@ -1,22 +1,23 @@
 ﻿using Interaction;
+using UI.Core;
 using UnityEngine;
 
 namespace Inventory.Interactions
 {
-    [CreateAssetMenu(fileName = "New Shop Option", menuName = "Interaction System/Shop Option", order = 2)]
-    public class OpenShopOptionSO : InteractionOptionSO
+    [CreateAssetMenu(fileName = "New Shop Option", menuName = "Interaction System/Shop Option", order = 3)]
+    public class ShopOptionSO : InteractionOptionSO
     {
         public override IInteractionOption CreateInstance(IInteractable interactable)
         {
-            return new OpenShopOption(interactable);
+            return new ShopOption(interactable);
         }
     }
 
-    public class OpenShopOption : InteractionOptionBase
+    public class ShopOption : InteractionOptionBase
     {
         private readonly Shop _shop;
 
-        public OpenShopOption(IInteractable interactable)
+        public ShopOption(IInteractable interactable)
         {
             Interactable = interactable;
             _shop = (interactable as Component)?.GetComponent<Shop>();
@@ -35,16 +36,15 @@ namespace Inventory.Interactions
             }
 
             // Get player's inventory
-            var playerInventory = source.GetComponent<Inventory>();
+            var playerInventory = source.GetComponent<RPGInventory>();
             if (playerInventory == null)
             {
                 Debug.LogWarning("Player doesn't have an inventory component!");
                 return;
             }
 
-            // Show shop UI - you'll implement this in UI layer
-            Debug.Log($"Opening shop UI for {_shop.ShopName}");
-            // UI.Core.UIManager.ShowShop(_shop, playerInventory);
+            // Show shop UI
+            UIManager.ShowShop(_shop, playerInventory);
         }
     }
 }

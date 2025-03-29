@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="shop-root" style="flex-grow: 0; position: absolute; width: 90%; height: 80%; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: auto; align-self: center; max-width: 1000px; max-height: 700px;">
+        <ui:VisualElement name="header" style="background-color: rgb(88, 88, 88); padding: 10px;">
+            <ui:Label text="General Store" name="shop-title" style="font-size: 20px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="content" style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement name="shop-container" style="flex-grow: 1; margin: 5px; border-width: 1px; border-color: rgb(60, 60, 60);">
+                <ui:VisualElement name="shop-header" style="background-color: rgb(88, 88, 88); padding: 5px;">
+                    <ui:Label text="Shop" name="shop-name-label" style="font-size: 16px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+                    <ui:Label text="Gold: 5000" name="shop-gold-label" style="font-size: 12px; color: rgb(239, 239, 239);" />
+                </ui:VisualElement>
+                <ui:Label text="Click to Buy" style="background-color: rgb(50, 50, 50); padding: 2px 5px; -unity-text-align: middle-center; color: rgb(239, 239, 239);" />
+                <ui:ScrollView name="shop-scroll-view" style="flex-grow: 1; padding: 5px;">
+                    <ui:VisualElement name="shop-grid" style="flex-direction: row; flex-wrap: wrap; justify-content: flex-start;" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="player-container" style="flex-grow: 1; margin: 5px; border-width: 1px; border-color: rgb(60, 60, 60);">
+                <ui:VisualElement name="player-header" style="background-color: rgb(88, 88, 88); padding: 5px;">
+                    <ui:Label text="Player" name="player-name-label" style="font-size: 16px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+                    <ui:VisualElement name="player-info" style="flex-direction: row; justify-content: space-between;">
+                        <ui:Label text="Gold: 1250" name="player-gold-label" style="font-size: 12px; color: rgb(239, 239, 239);" />
+                        <ui:Label text="Weight: 25.5/100.0" name="player-weight-label" style="font-size: 12px; color: rgb(239, 239, 239);" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="Click to Sell" style="background-color: rgb(50, 50, 50); padding: 2px 5px; -unity-text-align: middle-center; color: rgb(239, 239, 239);" />
+                <ui:ScrollView name="player-scroll-view" style="flex-grow: 1; padding: 5px;">
+                    <ui:VisualElement name="player-grid" style="flex-direction: row; flex-wrap: wrap; justify-content: flex-start;" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="footer" style="background-color: rgb(88, 88, 88); padding: 10px; flex-direction: row; justify-content: flex-end;">
+            <ui:Button text="Close" name="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

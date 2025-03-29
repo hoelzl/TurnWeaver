@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed023995beb4c819bdf49456251760e, type: 3}
+  m_Name: Examine Shop
+  m_EditorClassIdentifier: 
+  optionText: Examine
+  icon: {fileID: 0}
+  objectDescription: '<b>A Shop</b>
+
+
+    This is a shop. You can do whatever you
+    normally do in a shop. That is, mostly spend money.
+
+
+    You can also sell stuff
+    to get some money back, but normally shops will give you much less money for
+    stuff you sell to them than they ask for stuff you buy.'

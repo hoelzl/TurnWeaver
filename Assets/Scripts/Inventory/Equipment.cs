@@ -11,7 +11,7 @@ namespace Inventory
         private Dictionary<EquipmentSlot, EquipmentItemSO> equippedItems = new Dictionary<EquipmentSlot, EquipmentItemSO>();
 
         // Reference to the inventory
-        [SerializeField] private Inventory inventory;
+        [SerializeField] private RPGInventory inventory;
 
         // Events
         public event Action OnEquipmentChanged;
@@ -19,7 +19,7 @@ namespace Inventory
         private void Awake()
         {
             if (inventory == null)
-                inventory = GetComponent<Inventory>();
+                inventory = GetComponent<RPGInventory>();
         }
 
         // Equip an item

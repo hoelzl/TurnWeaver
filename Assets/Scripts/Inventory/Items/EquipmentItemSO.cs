@@ -14,7 +14,7 @@ namespace Inventory.Items
         Accessory
     }
 
-    [CreateAssetMenu(fileName = "New Equipment", menuName = "Inventory/Equipment", order = 1)]
+    [CreateAssetMenu(fileName = "New Equipment", menuName = "RPGInventory/Equipment", order = 1)]
     public class EquipmentItemSO : ItemSO
     {
         [Header("Equipment Properties")]

@@ -7,18 +7,18 @@ using UnityEngine;
 namespace Inventory
 {
     [RequireComponent(typeof(PlayerController))]
-    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(RPGInventory))]
     [RequireComponent(typeof(Equipment))]
     public class PlayerInventoryController : MonoBehaviour
     {
         private PlayerController _playerController;
-        private Inventory _inventory;
+        private RPGInventory _inventory;
         private Equipment _equipment;
 
         private void Awake()
         {
             _playerController = GetComponent<PlayerController>();
-            _inventory = GetComponent<Inventory>();
+            _inventory = GetComponent<RPGInventory>();
             _equipment = GetComponent<Equipment>();
         }
 

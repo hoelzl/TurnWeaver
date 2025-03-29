@@ -12,7 +12,7 @@ namespace Inventory.Items
         Misc
     }
 
-    [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item", order = 0)]
+    [CreateAssetMenu(fileName = "New Item", menuName = "RPGInventory/Item", order = 0)]
     public class ItemSO : ScriptableObject
     {
         [Header("Basic Info")]

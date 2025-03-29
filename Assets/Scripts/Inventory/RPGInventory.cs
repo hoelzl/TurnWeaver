@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Inventory
 {
-    public class Inventory : MonoBehaviour
+    public class RPGInventory : MonoBehaviour
     {
         [SerializeField] private float maxWeight = 100f;
         [SerializeField] private int maxSlots = 30;
@@ -123,7 +123,7 @@ namespace Inventory
         }
 
         // Move an item to another inventory
-        public bool MoveItemTo(Inventory targetInventory, int sourceIndex, int quantity = 1)
+        public bool MoveItemTo(RPGInventory targetInventory, int sourceIndex, int quantity = 1)
         {
             if (targetInventory == null || sourceIndex < 0 || sourceIndex >= items.Count || quantity <= 0)
                 return false;

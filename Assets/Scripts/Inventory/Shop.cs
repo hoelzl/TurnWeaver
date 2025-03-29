@@ -7,7 +7,7 @@ namespace Inventory
     public class Shop : MonoBehaviour, Interaction.IInteractable
     {
         [SerializeField] private string shopName = "Shop";
-        [SerializeField] private Inventory shopInventory;
+        [SerializeField] private RPGInventory shopInventory;
         [SerializeField] private float buyMarkup = 1.5f; // Price multiplier when buying
         [SerializeField] private float sellDiscount = 0.5f; // Price multiplier when selling
 
@@ -27,10 +27,10 @@ namespace Inventory
         private void Awake()
         {
             if (shopInventory == null)
-                shopInventory = GetComponent<Inventory>();
+                shopInventory = GetComponent<RPGInventory>();
 
             if (shopInventory == null)
-                shopInventory = gameObject.AddComponent<Inventory>();
+                shopInventory = gameObject.AddComponent<RPGInventory>();
         }
 
         // Calculate buy price for an item (what player pays)
@@ -46,7 +46,7 @@ namespace Inventory
         }
 
         // Player buys an item from the shop
-        public bool BuyItem(Inventory playerInventory, int shopItemIndex, int quantity = 1)
+        public bool BuyItem(RPGInventory playerInventory, int shopItemIndex, int quantity = 1)
         {
             if (shopItemIndex < 0 || shopItemIndex >= shopInventory.Items.Count)
                 return false;
@@ -77,7 +77,7 @@ namespace Inventory
         }
 
         // Player sells an item to the shop
-        public bool SellItem(Inventory playerInventory, int playerItemIndex, int quantity = 1)
+        public bool SellItem(RPGInventory playerInventory, int playerItemIndex, int quantity = 1)
         {
             if (playerItemIndex < 0 || playerItemIndex >= playerInventory.Items.Count)
                 return false;

@@ -1,4 +1,5 @@
 ﻿using Interaction;
+using UI.Core;
 using UnityEngine;
 
 namespace Inventory.Interactions
@@ -27,16 +28,15 @@ namespace Inventory.Interactions
         public override void Invoke(GameObject source)
         {
             // Get player's inventory
-            var playerInventory = source.GetComponent<Inventory>();
+            var playerInventory = source.GetComponent<RPGInventory>();
             if (playerInventory == null)
             {
                 Debug.LogWarning("Player doesn't have an inventory component!");
                 return;
             }
 
-            // Show inventory UI - you'll implement this in UI layer
-            Debug.Log("Opening inventory UI");
-            // UI.Core.UIManager.ShowInventory(playerInventory);
+            // Show inventory UI
+            UIManager.ShowInventory(playerInventory);
         }
     }
 }

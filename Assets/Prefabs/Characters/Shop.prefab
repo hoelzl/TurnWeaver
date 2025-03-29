@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 1904844719752071825}
   - component: {fileID: 3191910680625245383}
   - component: {fileID: 2418385625438084875}
-  - component: {fileID: 8687075774502428654}
-  - component: {fileID: 2574548224102914193}
+  - component: {fileID: 1925052963150030100}
+  - component: {fileID: 674132363359163981}
   m_Layer: 0
-  m_Name: NPC
+  m_Name: Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 312720c171c35c24cb5f3d4c02dd61fe, type: 2}
+  - {fileID: 2100000, guid: 3fc06b2fe47d596478394345000a45ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,24 +112,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8687075774502428654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8520023367432327712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 442c9f1f25d6491cb194708830f9d7ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  npcName: Yellow NPC
-  interactionOptions:
-  - {fileID: 11400000, guid: 6ec8619b425ceea42a254c154ead5779, type: 2}
-  - {fileID: 11400000, guid: f85e1d9d748b90d47981464da6a24459, type: 2}
-  - {fileID: 11400000, guid: f6a63db7d0a26f54f9e948b19ac00c2a, type: 2}
---- !u!114 &2574548224102914193
+--- !u!114 &1925052963150030100
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,3 +127,23 @@ MonoBehaviour:
   maxWeight: 100
   maxSlots: 30
   currency: 0
+--- !u!114 &674132363359163981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8520023367432327712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a6b3990a7014dbf9099b351b2caf606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopName: Shop (Blue)
+  shopInventory: {fileID: 1925052963150030100}
+  buyMarkup: 1.5
+  sellDiscount: 0.5
+  interactionOptions:
+  - {fileID: 11400000, guid: 2fbe67eddf7439c4d8820a056634ed36, type: 2}
+  - {fileID: 11400000, guid: c385cb81d51309a44b5e4115be1acf23, type: 2}
+  autoInvokeSingleOption: 0

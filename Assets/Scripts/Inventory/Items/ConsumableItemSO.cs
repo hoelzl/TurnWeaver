@@ -11,7 +11,7 @@ namespace Inventory.Items
         StatusEffect
     }
 
-    [CreateAssetMenu(fileName = "New Consumable", menuName = "Inventory/Consumable", order = 2)]
+    [CreateAssetMenu(fileName = "New Consumable", menuName = "RPGInventory/Consumable", order = 2)]
     public class ConsumableItemSO : ItemSO
     {
         [Header("Consumable Properties")]

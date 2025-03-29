@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="inventory-root" style="flex-grow: 0; position: absolute; width: 80%; height: 80%; background-color: rgb(118, 118, 118); justify-content: center; right: auto; align-items: stretch; align-content: auto; top: auto; left: auto; bottom: auto; align-self: center; max-width: 800px; max-height: 600px;">
+        <ui:VisualElement name="header" style="flex-direction: row; justify-content: space-between; padding: 10px; background-color: rgb(88, 88, 88); align-self: auto; align-items: center;">
+            <ui:Label text="Inventory" name="inventory-title" style="font-size: 20px; -unity-font-style: bold; color: rgb(239, 239, 239);" />
+            <ui:VisualElement name="info-container" style="flex-direction: row;">
+                <ui:Label text="Weight: 25.5/100.0" name="weight-label" style="margin-right: 20px; color: rgb(239, 239, 239);" />
+                <ui:Label text="Gold: 1250" name="gold-label" style="color: rgb(239, 239, 239);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:ScrollView name="items-scroll-view" style="flex-grow: 1; padding: 10px;">
+            <ui:VisualElement name="inventory-grid" style="flex-direction: row; flex-wrap: wrap; justify-content: flex-start;" />
+        </ui:ScrollView>
+        <ui:VisualElement name="footer" style="flex-direction: row; justify-content: flex-end; padding: 10px; background-color: rgb(88, 88, 88);">
+            <ui:Button text="Close" name="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
