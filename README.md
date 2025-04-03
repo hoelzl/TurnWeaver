@@ -5,6 +5,10 @@
 TurnWeaver serves as a practical example project demonstrating how to integrate Inkle's Ink narrative scripting language
 with common RPG systems within the Unity engine.
 
+<img src="Images/Screenshot-01.png"
+    style="display: block; margin-left: auto; margin-right: auto; width: 80%;"
+    alt="Screenshot of dialogue screen">
+
 **Please Note:** This project is currently in an **early stage of development** and is **incomplete**. While the core
 interaction between Ink and the RPG systems (Inventory, Quests, Dialogue) is functional, many aspects are not fully
 built out. It is intended more as a learning resource or starting point than a production-ready framework.
@@ -12,6 +16,15 @@ built out. It is intended more as a learning resource or starting point than a p
 **GitHub Repository:** [https://github.com/hoelzl/TurnWeaver](https://github.com/hoelzl/TurnWeaver)
 
 ## Core Features Demonstrated
+<div style="display: grid; grid-template-columns: 1fr 1fr; width: 96%; margin: 0 auto; gap: 2%; align-items: start;">
+  <img src="Images/Screenshot-02.png"
+       alt="Screenshot of shop screen"
+       style="width: 100%; height: auto; display: block;">
+
+  <img src="Images/Screenshot-03.png"
+       alt="Screenshot of quest log screen"
+       style="width: 100%; height: auto; display: block;">
+</div>
 
 * **Ink Dialogue:** Integration with Ink for branching conversations.
 * **RPG Systems:** Basic Inventory, Quest, and Interaction systems.
@@ -32,7 +45,7 @@ built out. It is intended more as a learning resource or starting point than a p
 1. **Clone the Repository:**
    Open your terminal or Git client and run:
    ```bash
-   git clone [https://github.com/hoelzl/TurnWeaver.git](https://github.com/hoelzl/TurnWeaver.git)
+   git clone https://github.com/hoelzl/TurnWeaver.git
    ```
    Alternatively, download the project as a ZIP file from the GitHub page.
 
@@ -68,7 +81,7 @@ built out. It is intended more as a learning resource or starting point than a p
 * **Functions:** You can call C# functions from Ink using the `EXTERNAL` keyword in Ink and binding them in
   `InkFunctionRegistry.cs`.
 * A number of example functions are available. You can find the list in `Assets/Data/Ink Dialogue/functions.ink`.
-* You can reference game objects via ID. 
+* You can reference game objects via ID.
   * The map of all objects currently available via ID is in `Assets/Data/Ink Dialogue/unique_ids.ink`
   * All assets with an `UniqueId` component can be referenced.
   * To generate the list in `unique_ids.ink` use the editor tool in the `Tools/Generate Unique ID List`.
