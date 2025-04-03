@@ -1,0 +1,7 @@
+﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/QuestLogStyles.uss"/>
+    <ui:VisualElement name="task-entry-root" class="task-entry-root">
+        <ui:Label name="task-name" text="Task Description" class="task-name-label"/>
+        <ui:Label name="task-status" text="[ ]" class="task-status-label"/>
+    </ui:VisualElement>
+</ui:UXML>

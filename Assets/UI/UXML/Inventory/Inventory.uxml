@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss"/>
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="inventory-root" class="panel-root"
+                          style="width: 80%; height: 80%; max-width: 800px; max-height: 600px;">
+            <ui:VisualElement name="header" class="panel-header">
+                <ui:Label text="Inventory" name="inventory-title" class="title-label"/>
+                <ui:VisualElement name="info-container" style="flex-direction: row;">
+                    <ui:Label text="Weight: 25.5/100.0" name="weight-label" class="info-label"
+                              style="margin-right: 20px;"/>
+                    <ui:Label text="Gold: 1250" name="gold-label" class="info-label"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:ScrollView name="items-scroll-view" class="panel-content">
+                <ui:VisualElement name="inventory-grid" class="item-grid-container"/>
+            </ui:ScrollView>
+            <ui:VisualElement name="footer" class="panel-footer">
+                <ui:Button text="Close" name="close-button" class="button button-close"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

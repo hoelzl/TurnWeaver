@@ -22,19 +22,19 @@ public class RaycastDebugger : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputActions.Player.Click.performed += OnClick;
-        _inputActions.Player.Enable();
+        _inputActions.Gameplay.Designate.performed += OnClick;
+        _inputActions.Gameplay.Enable();
     }
 
     private void OnDisable()
     {
-        _inputActions.Player.Click.performed -= OnClick;
-        _inputActions.Player.Disable();
+        _inputActions.Gameplay.Designate.performed -= OnClick;
+        _inputActions.Gameplay.Disable();
     }
 
     private void OnClick(InputAction.CallbackContext context)
     {
-        Vector2 mousePosition = _inputActions.Player.Point.ReadValue<Vector2>();
+        Vector2 mousePosition = _inputActions.Gameplay.Point.ReadValue<Vector2>();
         Ray ray = _mainCamera.ScreenPointToRay(mousePosition);
 
         // Draw the ray in scene view

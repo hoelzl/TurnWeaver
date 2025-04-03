@@ -1,0 +1,83 @@
+﻿@import url("project://database/Assets/UI/USS/InventoryStyles.uss"); /* Import variables and base styles */
+
+/* Override or Define specific centering for Dialogue */
+.fullscreen-centering-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Horizontal centering */
+    align-items: center;
+    /* Vertical alignment: Anchor to top + margin */
+    justify-content: flex-start; /* Align item to the start of the main axis (top for column) */
+    /* If flex-direction is row (default), use align-items: flex-start; */
+    /* Assuming vertical stacking, justify-content controls vertical */
+
+    /* Add some padding from the absolute top if needed, or rely on panel margin */
+    padding-top: 100px; /* Push down from very top edge */
+}
+
+
+/* Dialogue Panel Specific Styles */
+.dialogue-panel-root {
+    width: 600px;
+    max-height: 80%;
+    background-color: var(--color-background-main);
+    border-radius: 10px;
+    /* Removed padding - will be handled by children or specific sections */
+    flex-direction: column;
+    /* Removed margin-top - using padding on wrapper now for push-down */
+    /* Let the panel sit at the 'flex-start' position defined by the wrapper's padding */
+    /* Add bottom padding for inner spacing */
+    padding-bottom: 15px;
+}
+
+.dialogue-scroll-view {
+    flex-shrink: 0;
+    height: 200px; /* Fixed height for text area */
+    margin: 15px 15px 10px 15px; /* Add margins: top/horizontal/bottom */
+    /* Style the scroll view itself */
+    background-color: var(--color-description-background);
+    border-width: 4px;
+    border-color: var(--color-description-background);
+    border-radius: 5px;
+    padding: 8px; /* Padding INSIDE the scroll view bounds */
+}
+
+.dialogue-text-label {
+    /* Only text styles needed now */
+    margin: 0; /* Reset margin */
+    padding: 0; /* Reset padding */
+    white-space: normal;
+    color: var(--color-text-dark);
+    font-size: 14px;
+    /* Removed background, border, etc. */
+    /* Label expands vertically ONLY based on content */
+    /* Set min-height to ensure it fills ScrollView? */
+    min-height: 100%; /* Try forcing label to fill ScrollView's inner area */
+}
+
+.choices-container {
+    flex-shrink: 0;
+    align-items: stretch;
+    margin-bottom: 10px;
+    /* Use panel padding instead of L/R margins here */
+    /* Ensure container is wide enough */
+    padding-left: 15px; /* Align with scroll view margins */
+    padding-right: 15px;
+}
+
+.button-choice {
+    padding: 10px 20px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border-radius: 5px;
+    align-self: stretch;
+}
+
+.button-dialog { /* Close Button */
+    /* Ensure it aligns horizontally */
+    margin: 10px 15px 0 15px; /* top | horizontal | bottom */
+    align-self: stretch; /* Make sure close button also stretches */
+}

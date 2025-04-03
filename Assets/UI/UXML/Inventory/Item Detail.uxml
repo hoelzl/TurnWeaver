@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss"/>
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="item-detail-root" class="panel-root" style="width: 400px; height: auto;">
+            <ui:VisualElement name="header" class="panel-header" style="justify-content: flex-start;">
+                <ui:Label text="Item Details" name="detail-title" class="subtitle-label"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="content" class="panel-content">
+                <ui:VisualElement name="item-header" class="item-detail-header">
+                    <ui:VisualElement name="item-icon" class="item-detail-icon"/>
+                    <ui:Label text="Iron Sword" name="item-name" class="item-detail-name"/>
+                </ui:VisualElement>
+                <ui:Label text="A well-crafted iron sword..." name="item-description" class="description-label"/>
+                <ui:Label text="Weight: 3.5 | Value: 75..." name="item-stats" class="stats-label"/>
+                <ui:VisualElement name="action-buttons" class="item-detail-actions">
+                    <ui:Button text="Use" name="use-button" class="button button-action"/>
+                    <ui:Button text="Drop" name="drop-button" class="button button-action"/>
+                    <ui:Button text="Split" name="split-button" class="button button-action"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="footer" class="panel-footer">
+                <ui:Button text="Close" name="close-button" class="button button-close"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

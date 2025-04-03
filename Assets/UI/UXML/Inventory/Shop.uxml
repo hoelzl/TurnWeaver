@@ -1,0 +1,40 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss"/>
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="shop-root" class="panel-root"
+                          style="width: 90%; height: 80%; max-width: 1000px; max-height: 700px;">
+            <ui:VisualElement name="header" class="panel-header" style="justify-content: flex-start;">
+                <ui:Label text="General Store" name="shop-title" class="title-label"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="content" class="split-panel-container panel-content" style="padding: 0;">
+                <ui:VisualElement name="shop-container" class="section-container">
+                    <ui:VisualElement name="shop-header" class="section-header">
+                        <ui:Label text="Shop" name="shop-name-label" class="info-label-prominent"/>
+                        <ui:Label text="Gold: 5000" name="shop-gold-label" class="info-label"/>
+                    </ui:VisualElement>
+                    <ui:Label text="Click to Buy" class="section-hint-label"/>
+                    <ui:ScrollView name="shop-scroll-view" class="section-scrollview">
+                        <ui:VisualElement name="shop-grid" class="item-grid-container"/>
+                    </ui:ScrollView>
+                </ui:VisualElement>
+                <ui:VisualElement name="player-container" class="section-container">
+                    <ui:VisualElement name="player-header" class="section-header">
+                        <ui:Label text="Player" name="player-name-label" class="info-label-prominent"/>
+                        <ui:VisualElement name="player-info"
+                                          style="flex-direction: row; justify-content: space-between;">
+                            <ui:Label text="Gold: 1250" name="player-gold-label" class="info-label"/>
+                            <ui:Label text="Weight: 25.5/100.0" name="player-weight-label" class="info-label"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="Click to Sell" class="section-hint-label"/>
+                    <ui:ScrollView name="player-scroll-view" class="section-scrollview">
+                        <ui:VisualElement name="player-grid" class="item-grid-container"/>
+                    </ui:ScrollView>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="footer" class="panel-footer">
+                <ui:Button text="Close" name="close-button" class="button button-close"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,32 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/QuestLogStyles.uss?fileID=7433441132597879392&amp;guid=0c87b7223cb840d689ab55f056554f95&amp;type=3#QuestLogStyles" />
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss?fileID=7433441132597879392&amp;guid=22b3ce8f321346dda65a2e24b1b4cd52&amp;type=3#InventoryStyles" />
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="questlog-root" class="panel-root" style="width: 85%; height: 80%; max-width: 1000px; max-height: 700px;">
+            <ui:VisualElement name="header" class="panel-header">
+                <ui:Label text="Quest Log" name="questlog-title" class="title-label" />
+            </ui:VisualElement>
+            <ui:VisualElement name="content" class="split-panel-container panel-content" style="padding: 0; flex-grow: 1;">
+                <ui:VisualElement name="quest-list-container" class="section-container quest-list-panel" style="flex-grow: 0; flex-shrink: 1; flex-basis: 60%;">
+                    <ui:VisualElement name="quest-list-header" class="section-header">
+                        <ui:Label text="Quests" class="info-label-prominent" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="quest-list-scrollview" class="section-scrollview" style="flex-grow: 1;">
+                        <ui:VisualElement name="quest-list" />
+                    </ui:ScrollView>
+                </ui:VisualElement>
+                <ui:VisualElement name="task-detail-container" class="section-container task-detail-panel" style="flex-grow: 0; flex-shrink: 1; flex-basis: 40%;">
+                    <ui:VisualElement name="task-detail-header" class="section-header">
+                        <ui:Label text="Tasks" name="task-detail-title" class="info-label-prominent" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="task-list-scrollview" class="section-scrollview" style="flex-grow: 1;">
+                        <ui:VisualElement name="task-list" />
+                    </ui:ScrollView>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="footer" class="panel-footer">
+                <ui:Button text="Close" name="close-button" class="button button-close" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

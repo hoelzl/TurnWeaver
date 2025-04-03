@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss"/>
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="interaction-menu-root" class="dialog-root">
+            <ui:Label text="Description..." name="text" class="description-text-box"/>
+            <ui:Button name="ok-button" text="OK" class="button button-dialog"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

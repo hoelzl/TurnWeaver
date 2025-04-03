@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Button name="item-slot" class="item-slot-button">
+        <ui:VisualElement name="item-icon" class="item-slot-icon"/>
+        <ui:Label text="99" name="item-quantity" class="item-slot-quantity"/>
+        <ui:Label text="75" name="price-label" class="item-slot-price"/>
+    </ui:Button>
+</ui:UXML>

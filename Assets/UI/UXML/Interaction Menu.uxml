@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss"/>
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="interaction-menu-root" class="dialog-root">
+            <ui:VisualElement name="interaction-buttons-container" class="interaction-button-container"/>
+            <ui:Button name="cancel-button" text="Cancel" class="button button-dialog"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

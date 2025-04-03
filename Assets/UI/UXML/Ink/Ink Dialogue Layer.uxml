@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InkDialogueStyles.uss?fileID=7433441132597879392&amp;guid=ec1e3f9ba2304da18c6366eb6036ac01&amp;type=3#InkDialogueStyles" />
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="dialogue-panel" class="dialogue-panel-root">
+            <ui:ScrollView name="dialogue-scroll-view" class="dialogue-scroll-view">
+                <ui:Label name="dialogue-text" text="Dialogue starts here..." class="dialogue-text-label" />
+            </ui:ScrollView>
+            <ui:VisualElement name="choices-container" class="choices-container" />
+            <ui:Button name="close-button" text="Close" class="button button-dialog" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

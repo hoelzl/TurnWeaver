@@ -1,0 +1,8 @@
+﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/QuestLogStyles.uss"/>
+    <ui:Button name="quest-entry-button" class="quest-entry-button">
+        <ui:Label name="quest-name" text="Quest Name" class="quest-name-label"/>
+        <ui:Label name="quest-status" text="[Active]" class="quest-status-label"/>
+        <ui:VisualElement name="tracked-indicator" class="tracked-indicator"/>
+    </ui:Button>
+</ui:UXML>

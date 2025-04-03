@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss"/>
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="transfer-root" class="panel-root"
+                          style="width: 90%; height: 80%; max-width: 1000px; max-height: 700px;">
+            <ui:VisualElement name="header" class="panel-header" style="justify-content: flex-start;">
+                <ui:Label text="Transfer Items" name="header-label" class="title-label"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="content" class="split-panel-container panel-content" style="padding: 0;">
+                <ui:VisualElement name="source-container" class="section-container">
+                    <ui:VisualElement name="source-header" class="section-header">
+                        <ui:Label text="Player" name="source-name-label" class="info-label-prominent"/>
+                        <ui:Label text="Weight: 25.5/100.0" name="source-weight-label" class="info-label"/>
+                    </ui:VisualElement>
+                    <ui:ScrollView name="source-scroll-view" class="section-scrollview">
+                        <ui:VisualElement name="source-grid" class="item-grid-container"/>
+                    </ui:ScrollView>
+                </ui:VisualElement>
+                <ui:VisualElement name="target-container" class="section-container">
+                    <ui:VisualElement name="target-header" class="section-header">
+                        <ui:Label text="Container" name="target-name-label" class="info-label-prominent"/>
+                        <ui:Label text="Weight: 15.0/200.0" name="target-weight-label" class="info-label"/>
+                    </ui:VisualElement>
+                    <ui:ScrollView name="target-scroll-view" class="section-scrollview">
+                        <ui:VisualElement name="target-grid" class="item-grid-container"/>
+                    </ui:ScrollView>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="footer" class="panel-footer">
+                <ui:Button text="Close" name="close-button" class="button button-close"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

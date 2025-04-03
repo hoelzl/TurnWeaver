@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InventoryStyles.uss"/>
+    <ui:VisualElement name="centering-wrapper" class="fullscreen-centering-wrapper">
+        <ui:VisualElement name="quantity-selector-root" class="panel-root" style="width: 300px; height: auto;">
+            <ui:VisualElement name="header" class="panel-header" style="justify-content: flex-start;">
+                <ui:Label text="Select Quantity" name="title-label" class="info-label-prominent"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="content" class="panel-content" style="padding: 15px;">
+                <ui:VisualElement name="quantity-container" class="quantity-selector-container">
+                    <ui:Slider picking-mode="Ignore" name="quantity-slider" class="quantity-selector-slider"
+                               low-value="1" high-value="99"/>
+                    <ui:Label text="1" name="quantity-label" class="quantity-selector-label"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="button-container" class="quantity-selector-buttons">
+                    <ui:Button text="Cancel" name="cancel-button" class="button button-cancel"/>
+                    <ui:Button text="Confirm" name="confirm-button" class="button button-confirm"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

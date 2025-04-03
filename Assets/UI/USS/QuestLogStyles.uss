@@ -1,0 +1,158 @@
+﻿/* file: Assets/UI/USS/QuestLogStyles.uss */
+
+/* Quest Log Specific Styles */
+
+
+/* Apply a lighter background to the task detail container */
+.task-detail-panel {
+    background-color: var(--color-description-background);
+    /* padding: 5px; */
+}
+
+/* Task Detail Header: Revert title color back to light */
+.task-detail-panel .section-header {
+    background-color: var(--color-background-secondary);
+    /* margin: -5px -5px 5px -5px; */
+    padding: 5px 10px; /* Keep header padding */
+    /* Add bottom margin to separate from scrollview */
+    margin-bottom: 5px;
+}
+
+.task-detail-panel .info-label-prominent {
+    color: var(--color-text-light); /* Ensure Light text on dark header */
+}
+
+.task-detail-panel .section-scrollview {
+    padding: 5px; /* ADD padding here */
+}
+
+
+/* Quest List Panel */
+.quest-list-panel {
+    /* padding: 5px; */
+}
+
+.quest-list-panel .section-header {
+    /* margin: -5px -5px 5px -5px; */
+    padding: 5px 10px; /* Keep header padding */
+    /* Add bottom margin to separate from scrollview */
+    margin-bottom: 5px;
+}
+
+.quest-list-panel .section-scrollview {
+    padding: 5px; /* ADD padding here */
+}
+
+
+/* Quest Entry Button */
+.quest-entry-button {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    border-width: 1px;
+    border-color: var(--color-border-dark);
+    background-color: var(--color-background-secondary);
+    white-space: normal;
+}
+
+.quest-entry-button:hover {
+    background-color: var(--color-background-tertiary);
+}
+
+.quest-entry-button:focus,
+.quest-entry--selected {
+    border-color: orange;
+    background-color: var(--color-background-tertiary);
+}
+
+/* Quest Name Label */
+.quest-name-label {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-right: 10px;
+    font-size: 14px;
+    color: var(--color-text-light);
+    white-space: normal;
+    -unity-text-align: middle-left;
+}
+
+/* Quest Status Label */
+.quest-status-label {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--color-text-light);
+    -unity-font-style: italic;
+    min-width: 65px;
+    -unity-text-align: middle-right;
+}
+
+.quest-status--completed {
+    color: #88FF88; /* Light Green */
+}
+
+.quest-status--failed {
+    color: #FF8888; /* Light Red */
+}
+
+
+/* Tracked Indicator */
+.tracked-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: yellow;
+    border-radius: 5px;
+    margin-left: 5px;
+    flex-shrink: 0;
+    display: none;
+}
+
+.tracked-indicator--visible {
+    display: flex;
+}
+
+
+/* Task Entry Styles */
+.task-entry-root {
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 0;
+    margin-bottom: 2px;
+}
+
+/* Task Name Label */
+.task-name-label {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-right: 8px;
+    font-size: 13px;
+    color: var(--color-text-light); /* Ensure light text */
+    white-space: normal;
+    -unity-text-align: middle-left;
+}
+
+/* Task Status Label */
+.task-status-label {
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 13px;
+    min-width: 25px;
+    -unity-text-align: middle-center;
+    color: var(--color-text-light); /* Ensure light text */
+    padding: 0;
+    margin: 0;
+}
+
+/* Adjust status colors for light text on light background */
+.task-status--completed {
+    color: #AAFFAA; /* Lighter Green */
+}
+
+.task-status--failed {
+    color: #FF6666; /* Lighter Red */
+}
+
+.task-status--active {
+    color: #FFFF66; /* Yellow */
+}

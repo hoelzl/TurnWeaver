@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopyFileContentSettings">
+    <option name="addExtraLineBetweenFiles" value="false" />
+    <option name="fileCountLimit" value="50" />
+    <option name="headerFormat" value="```&#10;&#10;```csharp&#10;// file: $FILE_PATH" />
+    <option name="postText" value="```" />
+  </component>
+</project>

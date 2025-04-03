@@ -1,0 +1,4 @@
+﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/InkDialogueStyles.uss"/>
+    <ui:Button name="choice-button" text="Choice Text" class="button button-choice"/>
+</ui:UXML>
